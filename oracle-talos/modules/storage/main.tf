@@ -5,8 +5,8 @@ resource "oci_objectstorage_bucket" "talos_images" {
   namespace      = var.namespace
 
   # optional
-  public_access_type = var.public_access_type
-  versioning         = var.bucket_versioning
+  access_type = var.access_type
+  versioning  = var.bucket_versioning
   # access_type = var.bucket_access_type
   # auto_tiering          = var.bucket_auto_tiering
   # defined_tags          = { "Operations.CostCenter" = "42" }

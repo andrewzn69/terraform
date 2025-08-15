@@ -13,12 +13,12 @@ variable "namespace" {
   type        = string
 }
 
-variable "public_access_type" {
+variable "access_type" {
   description = "The type of public access enabled on this bucket"
   type        = string
   default     = "NoPublicAccess"
   validation {
-    condition     = contains(["NoPublicAccess", "ObjectRead", "ObjectReadWithoutList"], var.public_access_type)
+    condition     = contains(["NoPublicAccess", "ObjectRead", "ObjectReadWithoutList"], var.access_type)
     error_message = "Valid values are NoPublicAccess, ObjectRead, ObjectReadWithoutList."
   }
 }
@@ -26,7 +26,7 @@ variable "public_access_type" {
 variable "bucket_versioning" {
   description = "Set to Enabled to enable object versioning"
   type        = string
-  default     = "Enabled"
+  default     = "Disabled"
   validation {
     condition     = contains(["Enabled", "Disabled"], var.bucket_versioning)
     error_message = "Valid values are Enabled or Disabled."
