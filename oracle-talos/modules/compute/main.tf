@@ -112,8 +112,8 @@ resource "oci_core_instance" "controlplane_instance" {
     #     remote_data_volume_type = var.instance_launch_options_remote_data_volume_type
   }
   # launch_volume_attachments {
-  #     # REQUIRED
-  #     type = var.instance_launch_volume_attachments_type
+  # REQUIRED
+  # type = var.instance_launch_volume_attachments_type
   #
   #     # OPTIONAL
   #     device = var.instance_launch_volume_attachments_device
@@ -123,17 +123,17 @@ resource "oci_core_instance" "controlplane_instance" {
   #     is_pv_encryption_in_transit_enabled = var.instance_launch_volume_attachments_is_pv_encryption_in_transit_enabled
   #     is_read_only = var.instance_launch_volume_attachments_is_read_only
   #     is_shareable = var.instance_launch_volume_attachments_is_shareable
-  #     launch_create_volume_details {
-  #         # REQUIRED
-  #         size_in_gbs = var.instance_launch_volume_attachments_launch_create_volume_details_size_in_gbs
-  #         volume_creation_type = var.instance_launch_volume_attachments_launch_create_volume_details_volume_creation_type
+  # launch_create_volume_details {
+  # REQUIRED
+  # size_in_gbs          = var.instance_launch_volume_attachments_launch_create_volume_details_size_in_gbs
+  # volume_creation_type = var.instance_launch_volume_attachments_launch_create_volume_details_volume_creation_type
   #
   #         # OPTIONAL
   #         compartment_id = var.compartment_id
   #         display_name = var.instance_launch_volume_attachments_launch_create_volume_details_display_name
   #         kms_key_id = oci_kms_key.test_key.id
   #         vpus_per_gb = var.instance_launch_volume_attachments_launch_create_volume_details_vpus_per_gb
-  #     }
+  # }
   #     use_chap = var.instance_launch_volume_attachments_use_chap
   #     volume_id = oci_core_volume.test_volume.id
   # }
@@ -283,32 +283,32 @@ resource "oci_core_instance" "worker_instance" {
     network_type = var.instance_launch_options_network_type
     #     remote_data_volume_type = var.instance_launch_options_remote_data_volume_type
   }
-  # launch_volume_attachments {
-  #     # REQUIRED
-  #     type = var.instance_launch_volume_attachments_type
-  #
-  #     # OPTIONAL
-  #     device = var.instance_launch_volume_attachments_device
-  #     display_name = var.instance_launch_volume_attachments_display_name
-  #     encryption_in_transit_type = var.instance_launch_volume_attachments_encryption_in_transit_type
-  #     is_agent_auto_iscsi_login_enabled = var.instance_launch_volume_attachments_is_agent_auto_iscsi_login_enabled
-  #     is_pv_encryption_in_transit_enabled = var.instance_launch_volume_attachments_is_pv_encryption_in_transit_enabled
-  #     is_read_only = var.instance_launch_volume_attachments_is_read_only
-  #     is_shareable = var.instance_launch_volume_attachments_is_shareable
-  #     launch_create_volume_details {
-  #         # REQUIRED
-  #         size_in_gbs = var.instance_launch_volume_attachments_launch_create_volume_details_size_in_gbs
-  #         volume_creation_type = var.instance_launch_volume_attachments_launch_create_volume_details_volume_creation_type
-  #
-  #         # OPTIONAL
-  #         compartment_id = var.compartment_id
-  #         display_name = var.instance_launch_volume_attachments_launch_create_volume_details_display_name
-  #         kms_key_id = oci_kms_key.test_key.id
-  #         vpus_per_gb = var.instance_launch_volume_attachments_launch_create_volume_details_vpus_per_gb
-  #     }
-  #     use_chap = var.instance_launch_volume_attachments_use_chap
-  #     volume_id = oci_core_volume.test_volume.id
-  # }
+  launch_volume_attachments {
+    # REQUIRED
+    type = var.instance_launch_volume_attachments_type
+    #
+    #     # OPTIONAL
+    #     device = var.instance_launch_volume_attachments_device
+    #     display_name = var.instance_launch_volume_attachments_display_name
+    #     encryption_in_transit_type = var.instance_launch_volume_attachments_encryption_in_transit_type
+    #     is_agent_auto_iscsi_login_enabled = var.instance_launch_volume_attachments_is_agent_auto_iscsi_login_enabled
+    #     is_pv_encryption_in_transit_enabled = var.instance_launch_volume_attachments_is_pv_encryption_in_transit_enabled
+    #     is_read_only = var.instance_launch_volume_attachments_is_read_only
+    #     is_shareable = var.instance_launch_volume_attachments_is_shareable
+    launch_create_volume_details {
+      # REQUIRED
+      size_in_gbs          = var.instance_launch_volume_attachments_launch_create_volume_details_size_in_gbs
+      volume_creation_type = var.instance_launch_volume_attachments_launch_create_volume_details_volume_creation_type
+      #
+      # OPTIONAL
+      #         compartment_id = var.compartment_id
+      #         display_name = var.instance_launch_volume_attachments_launch_create_volume_details_display_name
+      #         kms_key_id = oci_kms_key.test_key.id
+      #         vpus_per_gb = var.instance_launch_volume_attachments_launch_create_volume_details_vpus_per_gb
+    }
+    #     use_chap = var.instance_launch_volume_attachments_use_chap
+    #     volume_id = oci_core_volume.test_volume.id
+  }
   # licensing_configs {
   #     # REQUIRED
   #     type = var.instance_licensing_configs_type

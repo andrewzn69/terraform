@@ -148,3 +148,21 @@ variable "worker_ocpus" {
   type        = number
   default     = 3
 }
+
+variable "instance_launch_volume_attachments_type" {
+  description = "Volume attachment type"
+  type        = string
+  default     = "iscsi"
+}
+
+variable "instance_launch_volume_attachments_launch_create_volume_details_size_in_gbs" {
+  description = "Size of the volume in Gbs"
+  type        = number
+  default     = 50
+}
+
+variable "instance_launch_volume_attachments_launch_create_volume_details_volume_creation_type" {
+  description = "Volume creation type"
+  type        = string
+  default     = "ATTRIBUTES"
+}
