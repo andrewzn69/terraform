@@ -18,9 +18,9 @@ output "object_name" {
   value       = oci_objectstorage_object.talos_image.object
 }
 
-output "object_id" {
-  description = "OCID of the uploaded object"
-  value       = oci_objectstorage_object.talos_image.id
+output "custom_image_id" {
+  description = "OCID of the custom Talos image"
+  value       = oci_core_image.talos_image.id
 }
 
 output "object_url" {

@@ -1,10 +1,10 @@
 resource "oci_objectstorage_bucket" "talos_images" {
-  # required
+  # REQUIRED
   compartment_id = var.compartment_id
   name           = var.bucket_name
   namespace      = var.namespace
 
-  # optional
+  # OPTIONAL
   access_type = var.access_type
   versioning  = var.bucket_versioning
   # access_type = var.bucket_access_type
@@ -28,13 +28,13 @@ resource "oci_objectstorage_bucket" "talos_images" {
 }
 
 resource "oci_objectstorage_object" "talos_image" {
-  # required
+  #  REQUIRED
   bucket    = oci_objectstorage_bucket.talos_images.name
   namespace = var.namespace
   object    = var.image_object_name
   source    = var.image_source_path
 
-  # optional
+  # OPTIONAL
   content_type = var.content_type
   # cache_control              = var.object_cache_control
   # content_disposition        = var.object_content_disposition
@@ -45,4 +45,25 @@ resource "oci_objectstorage_object" "talos_image" {
   # metadata                   = var.object_metadata
   # storage_tier               = var.object_storage_tier
   # opc_sse_kms_key_id         = var.object_opc_sse_kms_key_id
+}
+
+resource "oci_core_image" "talos_image" {
+  # REQUIRED
+  compartment_id = var.compartment_id
+
+  # OPTIONAL
+  display_name = var.image_display_name
+  # launch_mode  = var.image_launch_mode
+
+  image_source_details {
+    source_type    = "objectStorageTuple"
+    bucket_name    = oci_objectstorage_bucket.talos_images.name
+    namespace_name = var.namespace
+    object_name    = oci_objectstorage_object.talos_image.object # exported image name
+
+    # OPTIONAL
+    operating_system         = var.image_operating_system
+    operating_system_version = var.image_operating_system_version
+    source_image_type        = var.source_image_type
+  }
 }

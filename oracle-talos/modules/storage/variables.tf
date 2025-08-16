@@ -49,3 +49,26 @@ variable "content_type" {
   default     = "application/octet-stream"
 }
 
+variable "image_display_name" {
+  description = "Display name for the custom image"
+  type        = string
+  default     = "talos-oracle-arm64"
+}
+
+variable "image_operating_system" {
+  description = "Operating system of the image"
+  type        = string
+  default     = "Talos"
+}
+
+variable "image_operating_system_version" {
+  description = "Operating system version"
+  type        = string
+  default     = "v1.10.6"
+}
+
+variable "source_image_type" {
+  description = "Source image type"
+  type        = string
+  default     = "QCOW2"
+}
