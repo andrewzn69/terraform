@@ -7,6 +7,10 @@ terraform {
   }
 }
 
+locals {
+  cluster_endpoint_url = "https://${var.controlplane_private_ip}:6443"
+}
+
 # talos config files
 resource "talos_machine_secrets" "this" {
   talos_version = var.talos_version
@@ -15,8 +19,25 @@ resource "talos_machine_secrets" "this" {
 data "talos_machine_configuration" "controlplane" {
   cluster_name     = var.cluster_name
   machine_type     = "controlplane"
-  cluster_endpoint = var.cluster_endpoint
+  cluster_endpoint = local.cluster_endpoint_url
   machine_secrets  = talos_machine_secrets.this.machine_secrets
+  config_patches = [
+    yamlencode({
+      machine = {
+        certSANs = [
+          var.controlplane_private_ip,
+          var.load_balancer_ip
+        ]
+      }
+      cluster = {
+        apiServer = {
+          certSANs = [
+            var.load_balancer_ip
+          ]
+        }
+      }
+    })
+  ]
 }
 
 data "talos_machine_configuration" "worker" {
@@ -24,6 +45,16 @@ data "talos_machine_configuration" "worker" {
   machine_type     = "worker"
   cluster_endpoint = var.cluster_endpoint
   machine_secrets  = talos_machine_secrets.this.machine_secrets
+  config_patches = [
+    yamlencode({
+      machine = {
+        certSANs = [
+          var.worker_private_ip,
+          var.load_balancer_ip
+        ]
+      }
+    })
+  ]
 }
 
 data "talos_client_configuration" "this" {
@@ -209,6 +240,7 @@ resource "oci_core_instance" "controlplane_instance" {
     #     kms_key_id = oci_kms_key.test_key.id
   }
   # preserve_boot_volume = false
+  preserve_data_volumes_created_at_launch = false
 }
 
 resource "oci_core_instance" "worker_instance" {
@@ -381,6 +413,8 @@ resource "oci_core_instance" "worker_instance" {
     #     kms_key_id = oci_kms_key.test_key.id
   }
   # preserve_boot_volume = false
+
+  preserve_data_volumes_created_at_launch = false
 }
 
 resource "oci_network_load_balancer_backend" "controlplane_talos_backend" {
@@ -413,4 +447,34 @@ resource "oci_network_load_balancer_backend" "controlplane_controlplane_backend"
   # name = var.backend_name
   target_id = oci_core_instance.controlplane_instance.id
   # weight = var.backend_weight
+}
+
+# resource "talos_machine_configuration_apply" "controlplane_config" {
+#   client_configuration        = talos_machine_secrets.this.client_configuration
+#   machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
+#   node                        = oci_core_instance.controlplane_instance.public_ip
+#   depends_on                  = [oci_core_instance.controlplane_instance]
+# }
+#
+# resource "talos_machine_configuration_apply" "worker_config" {
+#   client_configuration        = talos_machine_secrets.this.client_configuration
+#   machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
+#   node                        = oci_core_instance.worker_instance.public_ip
+#   depends_on                  = [oci_core_instance.worker_instance]
+# }
+
+resource "talos_machine_bootstrap" "controlplane_bootstrap" {
+  depends_on = [
+    oci_core_instance.controlplane_instance,
+    oci_network_load_balancer_backend.controlplane_talos_backend,
+    oci_network_load_balancer_backend.controlplane_controlplane_backend
+  ]
+  node                 = var.load_balancer_ip
+  client_configuration = talos_machine_secrets.this.client_configuration
+}
+
+resource "talos_cluster_kubeconfig" "kubeconfig" {
+  client_configuration = talos_machine_secrets.this.client_configuration
+  node                 = var.load_balancer_ip
+  depends_on           = [talos_machine_bootstrap.controlplane_bootstrap]
 }

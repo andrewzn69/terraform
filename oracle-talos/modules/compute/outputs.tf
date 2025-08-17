@@ -25,3 +25,9 @@ output "cluster_endpoint" {
   value       = var.cluster_endpoint
   description = "Cluster endpoint"
 }
+
+output "kubeconfig" {
+  value       = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
+  description = "Kubernetes cluster configuration"
+  sensitive   = true
+}
