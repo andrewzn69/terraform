@@ -39,7 +39,7 @@ variable "subnet_cidr_block" {
 variable "cluster_name" {
   description = "Name of the Talos cluster"
   type        = string
-  default     = "valhalla"
+  default     = "novigrad"
 }
 
 variable "controlplane_display_name" {
@@ -62,4 +62,10 @@ variable "worker_display_name" {
 variable "worker_private_ip" {
   description = "Private IP for worker instance"
   type        = string
+}
+
+variable "minecraft_backend_port" {
+  description = "Port for Minecraft backend (NodePort)"
+  type        = number
+  default     = 31000
 }

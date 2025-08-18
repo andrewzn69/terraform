@@ -1,7 +1,7 @@
 variable "cluster_name" {
   description = "Name of the Talos cluster"
   type        = string
-  default     = "valhalla"
+  default     = "novigrad"
 }
 
 variable "talos_version" {
@@ -73,6 +73,17 @@ variable "controlplane_backend_port" {
   description = "Port for Kubernetes API backend"
   type        = number
   default     = 6443
+}
+
+variable "minecraft_backend_set_name" {
+  description = "Name of the minecraft backend set"
+  type        = string
+}
+
+variable "minecraft_backend_port" {
+  description = "Port for Minecraft backend (NodePort)"
+  type        = number
+  default     = 31000
 }
 
 # instance vars

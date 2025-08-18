@@ -45,4 +45,6 @@ module "compute" {
   network_load_balancer_id      = module.network.network_load_balancer_id
   talos_backend_set_name        = module.network.talos_backend_set_name
   controlplane_backend_set_name = module.network.controlplane_backend_set_name
+  minecraft_backend_set_name    = module.network.minecraft_backend_set_name
+  minecraft_backend_port        = var.minecraft_backend_port
 }

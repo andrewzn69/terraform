@@ -96,3 +96,23 @@ resource "oci_network_load_balancer_listener" "controlplane_listener" {
   port                     = var.controlplane_listener_port
   protocol                 = var.controlplane_listener_protocol
 }
+
+resource "oci_network_load_balancer_backend_set" "minecraft_backend_set" {
+  health_checker {
+    protocol           = var.minecraft_health_checker_protocol
+    interval_in_millis = var.minecraft_health_checker_interval_in_millis
+    port               = var.minecraft_health_checker_port
+  }
+  name                     = var.minecraft_backend_set_name
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.id
+  policy                   = var.backend_set_policy
+  is_preserve_source       = var.minecraft_backend_set_is_preserve_source
+}
+
+resource "oci_network_load_balancer_listener" "minecraft_listener" {
+  default_backend_set_name = oci_network_load_balancer_backend_set.minecraft_backend_set.name
+  name                     = var.minecraft_listener_name
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.id
+  port                     = var.minecraft_listener_port
+  protocol                 = var.minecraft_listener_protocol
+}

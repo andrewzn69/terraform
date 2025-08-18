@@ -139,6 +139,13 @@ resource "oci_network_load_balancer_backend" "controlplane_controlplane_backend"
   target_id                = oci_core_instance.controlplane_instance.id
 }
 
+resource "oci_network_load_balancer_backend" "worker_minecraft_backend" {
+  backend_set_name         = var.minecraft_backend_set_name
+  network_load_balancer_id = var.network_load_balancer_id
+  port                     = var.minecraft_backend_port
+  target_id                = oci_core_instance.worker_instance.id
+}
+
 resource "talos_machine_bootstrap" "controlplane_bootstrap" {
   depends_on = [
     oci_core_instance.controlplane_instance,
