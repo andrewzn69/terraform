@@ -242,51 +242,51 @@ variable "controlplane_listener_protocol" {
 }
 
 # minecraft backend set vars
-variable "minecraft_health_checker_protocol" {
-  description = "Protocol for minecraft health checker"
-  type        = string
-  default     = "TCP"
-}
-
-variable "minecraft_health_checker_interval_in_millis" {
-  description = "Interval in milliseconds for minecraft health checker"
-  type        = number
-  default     = 10000
-}
-
-variable "minecraft_health_checker_port" {
-  description = "Port for minecraft health checker"
-  type        = number
-  default     = 31142
-}
-
-variable "minecraft_backend_set_name" {
-  description = "Name for minecraft backend set"
-  type        = string
-  default     = "minecraft"
-}
-
-variable "minecraft_backend_set_is_preserve_source" {
-  description = "Whether to preserve source for minecraft backend set"
-  type        = bool
-  default     = false
-}
-
-# minecraft listener vars
-variable "minecraft_listener_name" {
-  description = "Name for minecraft listener"
-  type        = string
-  default     = "minecraft"
-}
-
-variable "minecraft_listener_port" {
-  description = "Port for minecraft listener"
-  type        = number
-  default     = 25565
-}
-
-variable "minecraft_listener_protocol" {
-  description = "Protocol for minecraft listener"
-  type        = string
-  default     = "TCP"
-}
+# variable "minecraft_health_checker_protocol" {
+#   description = "Protocol for minecraft health checker"
+#   type        = string
+#   default     = "TCP"
+# }
+#
+# variable "minecraft_health_checker_interval_in_millis" {
+#   description = "Interval in milliseconds for minecraft health checker"
+#   type        = number
+#   default     = 10000
+# }
+#
+# variable "minecraft_health_checker_port" {
+#   description = "Port for minecraft health checker"
+#   type        = number
+#   default     = 31142
+# }
+#
+# variable "minecraft_backend_set_name" {
+#   description = "Name for minecraft backend set"
+#   type        = string
+#   default     = "minecraft"
+# }
+#
+# variable "minecraft_backend_set_is_preserve_source" {
+#   description = "Whether to preserve source for minecraft backend set"
+#   type        = bool
+#   default     = false
+# }
+#
+# # minecraft listener vars
+# variable "minecraft_listener_name" {
+#   description = "Name for minecraft listener"
+#   type        = string
+#   default     = "minecraft"
+# }
+#
+# variable "minecraft_listener_port" {
+#   description = "Port for minecraft listener"
+#   type        = number
+#   default     = 25565
+# }
+#
+# variable "minecraft_listener_protocol" {
+#   description = "Protocol for minecraft listener"
+#   type        = string
+#   default     = "TCP"
+# }

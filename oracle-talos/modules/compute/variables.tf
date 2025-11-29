@@ -75,16 +75,16 @@ variable "controlplane_backend_port" {
   default     = 6443
 }
 
-variable "minecraft_backend_set_name" {
-  description = "Name of the minecraft backend set"
-  type        = string
-}
-
-variable "minecraft_backend_port" {
-  description = "Port for Minecraft backend (NodePort)"
-  type        = number
-  default     = 31000
-}
+# variable "minecraft_backend_set_name" {
+#   description = "Name of the minecraft backend set"
+#   type        = string
+# }
+#
+# variable "minecraft_backend_port" {
+#   description = "Port for Minecraft backend (NodePort)"
+#   type        = number
+#   default     = 31000
+# }
 
 # instance vars
 variable "subnet_id" {
