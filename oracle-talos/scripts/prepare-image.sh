@@ -7,24 +7,25 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 TEMP_DIR="$PROJECT_ROOT"/temp
 IMAGES_DIR="$PROJECT_ROOT/images"
 FILES_DIR="$PROJECT_ROOT/files"
+TALOS_VERSION="${TALOS_VERSION:-v1.11.5}"
 
 show_help() {
   cat << EOF
 	Usage: $0 [OPTIONS]
 
-	Prepare Talos image for Oracle Cloud Infrastructure
+	Prepare Talos image with Tailscale extension for Oracle Cloud Infrastructure
 
-	Detects .xz or .zst files in project root and converts them to .oci format.
+	Downloads Talos factory image with Tailscale extension and converts it to .oci format.
 
 	OPTIONS:
-		-h, --help	Show this help message
-		-v, --verbose	Enable verbose output
-		-c, --clean	Clean temp directory after completion
+		-h, --help           Show this help message
+		-v, --verbose        Enable verbose output
+		-c, --clean          Clean temp directory after completion
+		--version VERSION    Talos version (default: $TALOS_VERSION)
 
 	REQUIREMENTS:
-		- Compressed Talos image (.xz or .zst) in project root
 		- files/image_metadata.json file
-		- qemu-img, xz/zstd, tar commands
+		- qemu-img, xz, tar, curl, jq, cosign, sha256sum commands
 
 EOF
 }
@@ -41,33 +42,122 @@ error() {
 check_dependencies() {
   local missing_deps=()
 
-  if ! command -v qemu-img > /dev/null 2>&1; then
-    missing_deps+=("qemu-img")
-  fi
-
-  if ! command -v tar > /dev/null 2>&1; then
-    missing_deps+=("tar")
-  fi
+  for dep in qemu-img tar xz curl jq cosign sha256sum; do
+    if ! command -v "$dep" > /dev/null 2>&1; then
+      missing_deps+=("$dep")
+    fi
+  done
 
   if [[ ${#missing_deps[@]} -gt 0 ]]; then
     error "Missing required dependencies: ${missing_deps[*]}"
   fi
 }
 
-find_archive_file() {
-  local archive_files=()
+get_factory_schematic_id() {
+  log "Creating Tailscale extension schematic..."
 
-  while IFS= read -r -d '' file; do
-    archive_files+=("$file")
-  done < <(find "$PROJECT_ROOT" -maxdepth 1 \( -name "*.xz" -o -name "*.zst" \) -print0)
+  local response
+  response=$(
+    curl -s -X POST --data-binary @- https://factory.talos.dev/schematics << 'EOF'
+customization:
+  systemExtensions:
+    officialExtensions:
+      - siderolabs/tailscale
+EOF
+  )
 
-  if [[ ${#archive_files[@]} -eq 0 ]]; then
-    error "No .xz or .zst files found in project root"
-  elif [[ ${#archive_files[@]} -gt 1 ]]; then
-    error "Multiple archive files found: ${archive_files[*]}. Please keep only one."
+  local schematic_id
+  schematic_id=$(echo "$response" | jq -r '.id')
+
+  if [[ -z "$schematic_id" || "$schematic_id" == "null" ]]; then
+    error "Failed to get schematic ID from factory"
   fi
 
-  echo "${archive_files[0]}"
+  log "Schematic ID: $schematic_id"
+  echo "$schematic_id"
+}
+
+verify_installer_signature() {
+  local schematic_id="$1"
+  local version="$2"
+
+  log "Verifying installer image signature with cosign..."
+
+  local installer_image
+  installer_image="factory.talos.dev/installer/${schematic_id}:${version}"
+  local signing_key
+  signing_key="$TEMP_DIR/signing_key.pub"
+
+  # download factory signing key
+  if ! curl -s https://factory.talos.dev/oci/cosign/signing-key.pub -o "$signing_key"; then
+    error "Failed to download factory signing key"
+  fi
+
+  log "Verifying: $installer_image"
+
+  # verify installer image signature
+  if ! cosign verify --offline --insecure-ignore-tlog --insecure-ignore-sct --key "$signing_key" "$installer_image" > /dev/null 2>&1; then
+    error "Installer image signature verification failed"
+  fi
+
+  log "Signature verification: PASSED"
+}
+
+generate_image_checksum() {
+  local image_file
+  image_file="$1"
+
+  log "Generating SHA256 checksum..."
+
+  if [[ ! -f "$image_file" ]]; then
+    error "Image file not found: $image_file"
+  fi
+
+  local checksum
+  checksum=$(sha256sum "$image_file" | awk '{print $1}')
+
+  log "SHA256: $checksum"
+
+  # store checksum for audit trail
+  echo "$checksum $(basename "$image_file")" > "${image_file}.sha256"
+  log "Checksum saved: $(basename "$image_file").sha256"
+}
+
+verify_image_integrity() {
+  local image_file
+  image_file="$1"
+  local expected_checksum
+  expected_checksum="$2"
+
+  if [[ ! -f "$image_file" ]]; then
+    error "Image file not found: $image_file"
+  fi
+
+  local actual_checksum
+  actual_checksum=$(sha256sum "$image_file" | awk '{print $1}')
+
+  if [[ "$actual_checksum" != "$expected_checksum" ]]; then
+    error "Integrity check failed: checksum mismatch"
+  fi
+
+  log "Integrity verification: PASSED"
+}
+
+download_factory_image() {
+  local schematic_id="$1"
+  local version="$2"
+  local output_file="$3"
+
+  local url="https://factory.talos.dev/image/${schematic_id}/${version}/oracle-arm64.raw.xz"
+
+  log "Downloading Talos image from factory..."
+  log "URL: $url"
+
+  if ! curl -L -o "$output_file" "$url"; then
+    error "Failed to download image from factory"
+  fi
+
+  log "Downloaded: $(basename "$output_file")"
 }
 
 decompress_image() {
@@ -75,24 +165,7 @@ decompress_image() {
   local output_file="$2"
 
   log "Decompressing $(basename "$archive_file")..."
-
-  case "$archive_file" in
-    *.xz)
-      if ! command -v xz > /dev/null 2>&1; then
-        error "xz is required for .xz files"
-      fi
-      xz --decompress --stdout "$archive_file" > "$output_file"
-      ;;
-    *.zst)
-      if ! command -v zstd > /dev/null 2>&1; then
-        error "zstd is required for .zst files"
-      fi
-      zstd --decompress --stdout "$archive_file" > "$output_file"
-      ;;
-    *)
-      error "Unsupported archive format: $archive_file"
-      ;;
-  esac
+  xz --decompress --stdout "$archive_file" > "$output_file"
 }
 
 convert_to_qcow2() {
@@ -114,12 +187,15 @@ create_oci_archive() {
     error "Metadata file not found: $metadata_file"
   fi
 
-  (cd "$TEMP_DIR" && tar zcf "$oci_file" "$(basename "$qcow2_file")" -C "$FILES_DIR" "image_metadata.json")
+  if ! (cd "$TEMP_DIR" && tar zcf "$oci_file" "$(basename "$qcow2_file")" -C "$FILES_DIR" "image_metadata.json"); then
+    error "Failed to create OCI archive"
+  fi
 }
 
 main() {
   local verbose=false
   local clean=false
+  local version="$TALOS_VERSION"
 
   while [[ $# -gt 0 ]]; do
     case $1 in
@@ -134,6 +210,10 @@ main() {
       -c | --clean)
         clean=true
         shift
+        ;;
+      --version)
+        version="$2"
+        shift 2
         ;;
       -*)
         error "Unknown option: $1"
@@ -150,9 +230,6 @@ main() {
 
   check_dependencies
 
-  local archive_file
-  archive_file=$(find_archive_file)
-
   local metadata_file="$FILES_DIR/image_metadata.json"
   if [[ ! -f "$metadata_file" ]]; then
     error "Metadata file not found: $metadata_file"
@@ -160,21 +237,39 @@ main() {
 
   mkdir -p "$TEMP_DIR" "$IMAGES_DIR"
 
-  local basename_no_ext="${archive_file##*/}"
-  basename_no_ext="${basename_no_ext%.xz}"
-  basename_no_ext="${basename_no_ext%.zst}"
+  # get schematic id and download factory image
+  local schematic_id
+  schematic_id=$(get_factory_schematic_id)
 
-  local raw_file="$TEMP_DIR/$basename_no_ext"
-  local qcow2_file="$TEMP_DIR/${basename_no_ext%.*}.qcow2"
-  local oci_file="$IMAGES_DIR/${basename_no_ext%.*}.oci"
+  verify_installer_signature "$schematic_id" "$version"
 
-  log "Processing: $(basename "$archive_file")"
+  # download factory image and generate checksum
+  local archive_file="$TEMP_DIR/oracle-arm64-tailscale.raw.xz"
+  download_factory_image "$schematic_id" "$version" "$archive_file"
+
+  generate_image_checksum "$archive_file"
+
+  # process the image
+  local raw_file="$TEMP_DIR/oracle-arm64.raw"
+  local qcow2_file="$TEMP_DIR/oracle-arm64.qcow2"
+  local oci_file="$IMAGES_DIR/oracle-arm64-tailscale.oci"
+
+  log "Processing: Talos $version with Tailscale extension..."
 
   decompress_image "$archive_file" "$raw_file"
+
+  # verify decompressed raw image integrity
+  generate_image_checksum "$raw_file"
   convert_to_qcow2 "$raw_file" "$qcow2_file"
+
+  # verify qcow2 conversion integrity
+  generate_image_checksum "$qcow2_file"
+
   create_oci_archive "$qcow2_file" "$metadata_file" "$oci_file"
 
   log "Successfully created: $(basename "$oci_file")"
+  log "Schematic ID: $schematic_id"
+  log "Factory installer image: factory.talos.dev/installer/${schematic_id}:${version}"
 
   if [[ "$clean" == true ]]; then
     log "Cleaning temporary files..."
