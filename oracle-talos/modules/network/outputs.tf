@@ -73,17 +73,17 @@ output "controlplane_listener_id" {
   description = "OCID of the controlplane listener"
 }
 
-output "minecraft_backend_set_id" {
-  value       = oci_network_load_balancer_backend_set.minecraft_backend_set.id
-  description = "OCID of the minecraft backend set"
-}
-
-output "minecraft_backend_set_name" {
-  value       = oci_network_load_balancer_backend_set.minecraft_backend_set.name
-  description = "Name of the minecraft backend set"
-}
-
-output "minecraft_listener_id" {
-  value       = oci_network_load_balancer_listener.minecraft_listener.id
-  description = "OCID of the minecraft listener"
-}
+# output "minecraft_backend_set_id" {
+#   value       = oci_network_load_balancer_backend_set.minecraft_backend_set.id
+#   description = "OCID of the minecraft backend set"
+# }
+#
+# output "minecraft_backend_set_name" {
+#   value       = oci_network_load_balancer_backend_set.minecraft_backend_set.name
+#   description = "Name of the minecraft backend set"
+# }
+#
+# output "minecraft_listener_id" {
+#   value       = oci_network_load_balancer_listener.minecraft_listener.id
+#   description = "OCID of the minecraft listener"
+# }
