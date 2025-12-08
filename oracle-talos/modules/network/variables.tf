@@ -103,6 +103,12 @@ variable "subnet_display_name" {
   default     = "talos-subnet"
 }
 
+variable "subnet_dns_label" {
+  description = "DNS label for the subnet"
+  type        = string
+  default     = "talossubnet"
+}
+
 # network load balancer vars
 variable "network_load_balancer_display_name" {
   description = "Display name for the network load balancer"
