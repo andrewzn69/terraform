@@ -3,7 +3,7 @@ variable "compartment_id" {
   type        = string
 }
 
-# storage vars
+# storage config
 variable "bucket_name" {
   description = "Name of the storage bucket"
   type        = string
@@ -24,7 +24,7 @@ variable "image_source_path" {
   type        = string
 }
 
-# network vars
+# network config
 variable "vcn_cidr_blocks" {
   description = "CIDR block for the VCN"
   type        = string
@@ -35,37 +35,89 @@ variable "subnet_cidr_block" {
   type        = string
 }
 
-# compute vars
+# cluster config
 variable "cluster_name" {
   description = "Name of the Talos cluster"
   type        = string
   default     = "novigrad"
 }
 
-variable "controlplane_display_name" {
-  description = "Display name for controlplane instance"
+variable "talos_version" {
+  description = "Talos version"
   type        = string
-  default     = "controlplane-1"
+  default     = "v1.11.5"
 }
 
-variable "controlplane_private_ip" {
-  description = "Private IP for controlplane instance"
-  type        = string
-}
-
-variable "worker_display_name" {
-  description = "Display name for worker instance"
-  type        = string
-  default     = "worker-1"
-}
-
-variable "worker_private_ip" {
-  description = "Private IP for worker instance"
+variable "talos_factory_schematic_id" {
+  description = "Talos factory schematic ID for installer image with extension"
   type        = string
 }
 
-variable "minecraft_backend_port" {
-  description = "Port for Minecraft backend (NodePort)"
+variable "tailscale_auth_key" {
+  description = "Tailscale authentication key"
+  type        = string
+  sensitive   = true
+}
+
+# controlplane pool config
+variable "controlplane_count" {
+  description = "Number of controlplane nodes"
   type        = number
-  default     = 31000
+  default     = 1
 }
+
+variable "controlplane_memory_gb" {
+  description = "Memory in GB per controlplane node"
+  type        = number
+  default     = 4
+}
+
+variable "controlplane_ocpus" {
+  description = "OCPUs per controlplane node"
+  type        = number
+  default     = 1
+}
+
+variable "controlplane_base_ip_offset" {
+  description = "Starting IP offset for controlplane nodes"
+  type        = number
+  default     = 10
+}
+
+# worker pool config
+
+variable "worker_count" {
+  description = "Number of worker nodes"
+  type        = number
+  default     = 1
+}
+
+variable "worker_memory_gb" {
+  description = "Memory in GB per controlplane node"
+  type        = number
+  default     = 20
+}
+
+variable "worker_ocpus" {
+  description = "OCPUs per worker node"
+  type        = number
+  default     = 3
+}
+
+variable "worker_base_ip_offset" {
+  description = "Starting IP offset for worker nodes"
+  type        = number
+  default     = 20
+}
+
+variable "worker_boot_volume_size_gb" {
+  description = "Boot volume size in GB for worker nodes"
+  type        = number
+  default     = 50
+}
+
+# variable "minecraft_backend_port" {
+#   description = "Port for Minecraft backend (NodePort)"
+#   type        = number
+#   default     = 31000
+# }

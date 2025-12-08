@@ -19,32 +19,45 @@ module "network" {
 module "compute" {
   source = "../../modules/compute"
 
-  cluster_name     = var.cluster_name
-  cluster_endpoint = "https://${module.network.network_load_balancer_ip_addresses[0].ip_address}:6443"
-  load_balancer_ip = module.network.network_load_balancer_ip_addresses[0].ip_address
+  # cluster config
+  cluster_name               = var.cluster_name
+  talos_version              = var.talos_version
+  talos_factory_schematic_id = var.talos_factory_schematic_id
+  tailscale_auth_key         = var.tailscale_auth_key
+  cluster_endpoint           = "https://${module.network.network_load_balancer_ip_addresses[0].ip_address}:6443"
+  load_balancer_ip           = module.network.network_load_balancer_ip_addresses[0].ip_address
 
-  # basic infra
+  # infra
   compartment_id = var.compartment_id
   subnet_id      = module.network.subnet_id
+  subnet_cidr    = var.subnet_cidr_block
 
-  # custom image from storage module
-  custom_image_id  = module.storage.custom_image_id
-  object_bucket    = module.storage.bucket_name
-  object_namespace = module.storage.bucket_namespace
-  object_object    = module.storage.object_name
+  # custom image
+  custom_image_id = module.storage.custom_image_id
 
-  # controlplane config
-  controlplane_display_name = var.controlplane_display_name
-  controlplane_private_ip   = var.controlplane_private_ip
+  # controlplane pool
+  controlplane_count          = var.controlplane_count
+  controlplane_memory_gb      = var.controlplane_memory_gb
+  controlplane_ocpus          = var.controlplane_ocpus
+  controlplane_base_ip_offset = var.controlplane_base_ip_offset
 
-  # worker config
-  worker_display_name = var.worker_display_name
-  worker_private_ip   = var.worker_private_ip
+  # worker pool
+  worker_count               = var.worker_count
+  worker_memory_gb           = var.worker_memory_gb
+  worker_ocpus               = var.worker_ocpus
+  worker_base_ip_offset      = var.worker_base_ip_offset
+  worker_boot_volume_size_gb = var.worker_boot_volume_size_gb
 
   # load balancer backend registration
   network_load_balancer_id      = module.network.network_load_balancer_id
   talos_backend_set_name        = module.network.talos_backend_set_name
   controlplane_backend_set_name = module.network.controlplane_backend_set_name
-  # minecraft_backend_set_name    = module.network.minecraft_backend_set_name
-  # minecraft_backend_port        = var.minecraft_backend_port
+}
+
+module "game_servers" {
+  source = "../../modules/game-servers"
+
+  compartment_id           = var.compartment_id
+  network_load_balancer_id = module.network.network_load_balancer_id
+  worker_instance_ids      = module.compute.worker_instance_ids
 }

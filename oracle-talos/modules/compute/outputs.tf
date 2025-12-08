@@ -31,3 +31,33 @@ output "kubeconfig" {
   description = "Kubernetes cluster configuration"
   sensitive   = true
 }
+
+output "controlplane_private_ips" {
+  value       = [for inst in oci_core_instance.controlplane : inst.private_ip]
+  description = "Private IPs of controlplane nodes"
+}
+
+output "controlplane_public_ips" {
+  value       = [for inst in oci_core_instance.controlplane : inst.public_ip]
+  description = "Public IPs of controlplane nodes"
+}
+
+output "worker_private_ips" {
+  value       = [for inst in oci_core_instance.worker : inst.private_ip]
+  description = "Private IPs of worker nodes"
+}
+
+output "worker_public_ips" {
+  value       = [for inst in oci_core_instance.worker : inst.public_ip]
+  description = "Public IPs of worker nodes"
+}
+
+output "controlplane_instance_ids" {
+  value       = [for inst in oci_core_instance.controlplane : inst.id]
+  description = "Instance IDs of controlplane nodes"
+}
+
+output "worker_instance_ids" {
+  value       = [for inst in oci_core_instance.worker : inst.id]
+  description = "Instance IDs of worker nodes"
+}
