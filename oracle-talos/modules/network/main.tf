@@ -43,6 +43,7 @@ resource "oci_core_subnet" "talos_subnet" {
   compartment_id    = var.compartment_id
   vcn_id            = oci_core_vcn.talos_vcn.id
   display_name      = var.subnet_display_name
+  dns_label         = var.subnet_dns_label
   route_table_id    = oci_core_route_table.talos_route_table.id
   security_list_ids = [oci_core_security_list.talos_security_list.id]
 }
