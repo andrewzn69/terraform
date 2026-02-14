@@ -1,5 +1,13 @@
 # talos.tf - talos machine secrets, config generation, apply, bootstrap and kubeconfig
 
+resource "talos_image_factory_schematic" "this" {
+  schematic = file("${path.module}/schematic.yaml")
+}
+
+locals {
+  talos_installer_image = "factory.talos.dev/nocloud-installer/${talos_image_factory_schematic.this.id}:${var.talos_version}"
+}
+
 resource "talos_machine_secrets" "this" {
   talos_version = var.talos_version
 }
@@ -40,7 +48,7 @@ resource "talos_machine_configuration_apply" "control_plane" {
 
   config_patches = [
     templatefile("${path.module}/patches/controlplane.yaml.tpl", {
-      installer_image = var.talos_installer_image
+      installer_image = local.talos_installer_image
       node_subnet     = var.node_subnet
     }),
     var.tailscale_auth_key != "" ? templatefile("${path.module}/patches/tailscale.yaml.tpl", {
@@ -63,7 +71,7 @@ resource "talos_machine_configuration_apply" "worker" {
 
   config_patches = [
     templatefile("${path.module}/patches/worker.yaml.tpl", {
-      installer_image = var.talos_installer_image
+      installer_image = local.talos_installer_image
       node_subnet     = var.node_subnet
     }),
     var.tailscale_auth_key != "" ? templatefile("${path.module}/patches/tailscale.yaml.tpl", {
