@@ -7,7 +7,7 @@ terraform {
     organization = "zemn"
 
     workspaces {
-      name = "homelab-talos"
+      name = "homelab-talos-prod"
     }
   }
 
