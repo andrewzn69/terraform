@@ -131,11 +131,6 @@ variable "kubernetes_version" {
   type        = string
 }
 
-variable "talos_installer_image" {
-  description = "Talos installer image from factory"
-  type        = string
-}
-
 variable "cluster_name" {
   description = "Name of the Talos cluster"
   type        = string

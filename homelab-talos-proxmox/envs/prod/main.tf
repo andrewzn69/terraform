@@ -29,11 +29,10 @@ module "talos_cluster" {
   talos_iso_path            = var.talos_iso_path
 
   # talos
-  talos_version         = var.talos_version
-  kubernetes_version    = var.kubernetes_version
-  talos_installer_image = var.talos_installer_image
-  cluster_name          = var.cluster_name
-  cluster_endpoint      = var.cluster_endpoint
-  cluster_api_host      = var.cluster_api_host
-  tailscale_auth_key    = var.tailscale_auth_key
+  talos_version      = var.talos_version
+  kubernetes_version = var.kubernetes_version
+  cluster_name       = var.cluster_name
+  cluster_endpoint   = var.cluster_endpoint
+  cluster_api_host   = var.cluster_api_host
+  tailscale_auth_key = var.tailscale_auth_key
 }
