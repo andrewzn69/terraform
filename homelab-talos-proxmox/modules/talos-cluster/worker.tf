@@ -1,61 +1,61 @@
-# worker vms - one per worker node
-resource "proxmox_vm_qemu" "worker_vm" {
+# worker.tf - worker vms
+
+resource "proxmox_virtual_environment_vm" "worker_vm" {
   for_each = { for vm in local.worker_vms : vm.name => vm }
 
-  vmid        = each.value.vmid
-  name        = each.value.name
-  target_node = var.proxmox_host
-  agent       = 1
-  bootdisk    = "scsi0"
-  scsihw      = "virtio-scsi-pci"
-  onboot      = true
-  ipconfig0   = "ip=${each.value.ip}/24,gw=${var.gateway_ip}"
+  name      = each.value.name
+  node_name = var.proxmox_host
+  vm_id     = each.value.vmid
+  on_boot   = true
+
+  agent {
+    enabled = true
+  }
 
   cpu {
     cores = each.value.cpu
   }
-  memory = each.value.memory
 
-  disks {
-    scsi {
-      scsi0 {
-        disk {
-          storage = var.proxmox_storage
-          size    = var.worker_disk_size
-        }
-      }
-      scsi1 {
-        cloudinit {
-          storage = var.proxmox_storage
-        }
-      }
-      scsi2 {
-        disk {
-          storage = var.worker_data_storage
-          size    = var.worker_data_disk_size
-        }
-      }
-    }
-    ide {
-      ide2 {
-        cdrom {
-          iso = var.talos_iso_path
-        }
-      }
-    }
+  memory {
+    dedicated = each.value.memory
   }
 
-  network {
-    id     = 0
-    model  = "virtio"
+  cdrom {
+    file_id   = proxmox_virtual_environment_download_file.talos_iso.id
+    interface = "ide2"
+  }
+
+  disk {
+    datastore_id = var.proxmox_storage
+    interface    = "scsi0"
+    size         = var.worker_disk_size
+  }
+
+  disk {
+    datastore_id = var.worker_data_storage
+    interface    = "scsi1"
+    size         = var.worker_data_disk_size
+  }
+
+  network_device {
     bridge = var.proxmox_bridge
+    model  = "virtio"
+  }
+
+  initialization {
+    ip_config {
+      ipv4 {
+        address = "${each.value.ip}/${split("/", var.node_subnet)[1]}"
+        gateway = var.gateway_ip
+      }
+    }
   }
 
   lifecycle {
     ignore_changes = [
-      disk,
-      network,
-      desc
+      cdrom,
+      network_device,
+      description,
     ]
   }
 }
