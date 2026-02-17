@@ -4,9 +4,10 @@ module "talos_cluster" {
   source = "../../modules/talos-cluster"
 
   # proxmox
-  proxmox_host    = var.proxmox_host
-  proxmox_storage = var.proxmox_storage
-  proxmox_bridge  = var.proxmox_bridge
+  proxmox_host      = var.proxmox_host
+  proxmox_storage   = var.proxmox_storage
+  cloudinit_storage = var.cloudinit_storage
+  proxmox_bridge    = var.proxmox_bridge
 
   # networking
   gateway_ip     = var.gateway_ip

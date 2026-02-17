@@ -12,6 +12,11 @@ variable "proxmox_storage" {
   type        = string
 }
 
+variable "cloudinit_storage" {
+  description = "Proxmox directory storage for cloud-init drives"
+  type        = string
+}
+
 variable "proxmox_bridge" {
   description = "Proxmox network bridge for VM NICs"
   type        = string
