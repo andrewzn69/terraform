@@ -8,15 +8,19 @@ resource "tfe_agent_pool" "homelab" {
 resource "tfe_workspace" "homelab_talos_prod" {
   name              = "homelab-talos-prod"
   organization      = "zemn"
-  execution_mode    = "agent"
-  agent_pool_id     = tfe_agent_pool.homelab.id
   working_directory = "terraform/homelab-talos-proxmox/envs/prod"
 
   vcs_repo {
-    identifier     = "andrewzn69/terraform"
-    branch         = "master"
+    identifier                 = "andrewzn69/terraform"
+    branch                     = "master"
     github_app_installation_id = var.github_app_installation_id
   }
+}
+
+resource "tfe_workspace_settings" "homelab_talos_prod" {
+  workspace_id   = tfe_workspace.homelab_talos_prod.id
+  execution_mode = "agent"
+  agent_pool_id  = tfe_agent_pool.homelab.id
 }
 
 # --- proxmox ---
