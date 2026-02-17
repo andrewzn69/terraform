@@ -18,7 +18,7 @@ variable "tailscale_auth_key" {
   sensitive   = true
 }
 
-variable "vcs_oauth_token_id" {
-  description = "HCP VCS OAuth token ID for GitHub connection"
+variable "github_app_installation_id" {
+  description = "HCP GitHub App installation ID for VCS connection"
   type        = string
 }

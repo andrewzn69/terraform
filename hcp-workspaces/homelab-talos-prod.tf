@@ -15,7 +15,7 @@ resource "tfe_workspace" "homelab_talos_prod" {
   vcs_repo {
     identifier     = "andrewzn69/terraform"
     branch         = "master"
-    oauth_token_id = var.vcs_oauth_token_id
+    github_app_installation_id = var.github_app_installation_id
   }
 }
 
