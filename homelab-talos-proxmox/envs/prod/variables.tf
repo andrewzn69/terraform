@@ -86,7 +86,7 @@ variable "control_plane_memory" {
 
 variable "control_plane_disk_size" {
   description = "OS disk size for control plane VMs"
-  type        = string
+  type        = number
 }
 
 variable "worker_cpu" {
@@ -101,7 +101,7 @@ variable "worker_memory" {
 
 variable "worker_disk_size" {
   description = "OS disk size for worker VMs"
-  type        = string
+  type        = number
 }
 
 variable "worker_data_storage" {
@@ -111,12 +111,7 @@ variable "worker_data_storage" {
 
 variable "worker_data_disk_size" {
   description = "Data disk size for worker VMs"
-  type        = string
-}
-
-variable "talos_iso_path" {
-  description = "Proxmox path to the Talos ISO"
-  type        = string
+  type        = number
 }
 
 # --- talos ---

@@ -24,20 +24,18 @@ locals {
     }
   ]
 
-  all_vms = concat(local.control_plane_vms, local.worker_vms)
-
   control_plane_private_ipv4_list = [
-    for vm in local.control_plane_vms : proxmox_vm_qemu.control_plane_vm[vm.name].default_ipv4_address
+    for vm in local.control_plane_vms : vm.ip
   ]
 
   cluster_api_host_public = var.cluster_api_host != null ? var.cluster_api_host : var.cluster_endpoint
 
-  bootstrap_endpoint = proxmox_vm_qemu.control_plane_vm[local.control_plane_vms[0].name].default_ipv4_address
+  bootstrap_endpoint = local.control_plane_vms[0].ip
 
   total_memory_mb = (var.control_plane_vm_count * var.control_plane_memory) + ((var.number_of_vms - var.control_plane_vm_count) * var.worker_memory)
 }
 
-resource "null_resource" "validate_resources" {
+resource "terraform_data" "validate_resources" {
   lifecycle {
     precondition {
       condition     = local.total_memory_mb <= 16384

@@ -26,7 +26,6 @@ module "talos_cluster" {
   worker_disk_size          = var.worker_disk_size
   worker_data_storage       = var.worker_data_storage
   worker_data_disk_size     = var.worker_data_disk_size
-  talos_iso_path            = var.talos_iso_path
 
   # talos
   talos_version      = var.talos_version
