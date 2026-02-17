@@ -20,11 +20,11 @@ resource "proxmox_virtual_environment_vm" "control_plane_vm" {
     dedicated = each.value.memory
   }
 
-  boot_order = ["scsi0", "ide2", "net0"]
+  boot_order = ["scsi0", "ide0", "net0"]
 
   cdrom {
     file_id   = proxmox_virtual_environment_download_file.talos_iso.id
-    interface = "ide2"
+    interface = "ide0"
   }
 
   disk {
