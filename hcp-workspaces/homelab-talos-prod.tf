@@ -49,7 +49,7 @@ resource "tfe_variable" "proxmox_storage" {
 resource "tfe_variable" "cloudinit_storage" {
   workspace_id = tfe_workspace.homelab_talos_prod.id
   key          = "cloudinit_storage"
-  value        = "local"
+  value        = "local-lvm"
   category     = "terraform"
 }
 
