@@ -61,6 +61,8 @@ resource "talos_machine_configuration_apply" "control_plane" {
     create = "10m"
     update = "10m"
   }
+
+  depends_on = [proxmox_virtual_environment_vm.control_plane_vm]
 }
 
 resource "talos_machine_configuration_apply" "worker" {
@@ -84,6 +86,8 @@ resource "talos_machine_configuration_apply" "worker" {
     create = "10m"
     update = "10m"
   }
+
+  depends_on = [proxmox_virtual_environment_vm.worker_vm]
 }
 
 resource "talos_machine_bootstrap" "this" {
