@@ -46,6 +46,13 @@ resource "tfe_variable" "proxmox_storage" {
   category     = "terraform"
 }
 
+resource "tfe_variable" "cloudinit_storage" {
+  workspace_id = tfe_workspace.homelab_talos_prod.id
+  key          = "cloudinit_storage"
+  value        = "local"
+  category     = "terraform"
+}
+
 resource "tfe_variable" "proxmox_bridge" {
   workspace_id = tfe_workspace.homelab_talos_prod.id
   key          = "proxmox_bridge"
