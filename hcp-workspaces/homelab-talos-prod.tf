@@ -129,7 +129,7 @@ resource "tfe_variable" "control_plane_memory" {
 resource "tfe_variable" "control_plane_disk_size" {
   workspace_id = tfe_workspace.homelab_talos_prod.id
   key          = "control_plane_disk_size"
-  value        = "20G"
+  value        = "20"
   category     = "terraform"
 }
 
@@ -150,7 +150,7 @@ resource "tfe_variable" "worker_memory" {
 resource "tfe_variable" "worker_disk_size" {
   workspace_id = tfe_workspace.homelab_talos_prod.id
   key          = "worker_disk_size"
-  value        = "20G"
+  value        = "20"
   category     = "terraform"
 }
 
@@ -164,7 +164,7 @@ resource "tfe_variable" "worker_data_storage" {
 resource "tfe_variable" "worker_data_disk_size" {
   workspace_id = tfe_workspace.homelab_talos_prod.id
   key          = "worker_data_disk_size"
-  value        = "50G"
+  value        = "50"
   category     = "terraform"
 }
 
@@ -181,13 +181,6 @@ resource "tfe_variable" "kubernetes_version" {
   workspace_id = tfe_workspace.homelab_talos_prod.id
   key          = "kubernetes_version"
   value        = "v1.35.0"
-  category     = "terraform"
-}
-
-resource "tfe_variable" "talos_iso_path" {
-  workspace_id = tfe_workspace.homelab_talos_prod.id
-  key          = "talos_iso_path"
-  value        = "local:iso/talos.iso"
   category     = "terraform"
 }
 
