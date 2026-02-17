@@ -8,7 +8,7 @@ resource "tfe_agent_pool" "homelab" {
 resource "tfe_workspace" "homelab_talos_prod" {
   name              = "homelab-talos-prod"
   organization      = "zemn"
-  working_directory = "terraform/homelab-talos-proxmox/envs/prod"
+  working_directory = "homelab-talos-proxmox/envs/prod"
 
   vcs_repo {
     identifier                 = "andrewzn69/terraform"
