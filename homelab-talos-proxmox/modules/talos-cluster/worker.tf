@@ -14,11 +14,14 @@ resource "proxmox_virtual_environment_vm" "worker_vm" {
 
   cpu {
     cores = each.value.cpu
+    type  = "host"
   }
 
   memory {
     dedicated = each.value.memory
   }
+
+  boot_order = ["scsi0", "ide2", "net0"]
 
   cdrom {
     file_id   = proxmox_virtual_environment_download_file.talos_iso.id
@@ -43,6 +46,7 @@ resource "proxmox_virtual_environment_vm" "worker_vm" {
   }
 
   initialization {
+    datastore_id = var.cloudinit_storage
     ip_config {
       ipv4 {
         address = "${each.value.ip}/${split("/", var.node_subnet)[1]}"
@@ -54,6 +58,7 @@ resource "proxmox_virtual_environment_vm" "worker_vm" {
   lifecycle {
     ignore_changes = [
       cdrom,
+      boot_order,
       network_device,
       description,
     ]
