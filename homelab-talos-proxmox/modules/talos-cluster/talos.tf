@@ -37,7 +37,7 @@ data "talos_machine_configuration" "worker" {
 data "talos_client_configuration" "this" {
   cluster_name         = var.cluster_name
   client_configuration = talos_machine_secrets.this.client_configuration
-  endpoints            = [local.cluster_api_host_public]
+  endpoints            = local.control_plane_private_ipv4_list
 }
 
 resource "talos_machine_configuration_apply" "control_plane" {
