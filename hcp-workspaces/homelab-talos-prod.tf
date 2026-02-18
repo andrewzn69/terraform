@@ -186,7 +186,7 @@ resource "tfe_variable" "worker_data_storage" {
 resource "tfe_variable" "worker_data_disk_size" {
   workspace_id = tfe_workspace.homelab_talos_prod.id
   key          = "worker_data_disk_size"
-  value        = "50"
+  value        = "100"
   category     = "terraform"
 }
 
