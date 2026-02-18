@@ -24,6 +24,16 @@ resource "tfe_workspace_settings" "homelab_talos_prod" {
   agent_pool_id  = tfe_agent_pool.homelab.id
 }
 
+data "tfe_workspace" "seed" {
+  name         = "hcp-workspaces"
+  organization = "zemn"
+}
+
+resource "tfe_run_trigger" "homelab_talos_prod" {
+  workspace_id  = tfe_workspace.homelab_talos_prod.id
+  sourceable_id = data.tfe_workspace.seed.id
+}
+
 # --- proxmox ---
 
 resource "tfe_variable" "proxmox_host_ip" {
