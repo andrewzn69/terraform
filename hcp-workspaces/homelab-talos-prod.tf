@@ -223,3 +223,10 @@ resource "tfe_variable" "tailscale_auth_key" {
     ignore_changes = [value]
   }
 }
+
+resource "tfe_variable" "cilium_version" {
+  workspace_id = tfe_workspace.homelab_talos_prod.id
+  key          = "cilium_version"
+  value        = "1.19.1"
+  category     = "terraform"
+}

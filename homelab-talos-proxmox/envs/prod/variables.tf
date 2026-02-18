@@ -153,3 +153,8 @@ variable "tailscale_auth_key" {
   sensitive   = true
   default     = ""
 }
+
+variable "cilium_version" {
+  description = "Cilium Helm chart version"
+  type        = string
+}

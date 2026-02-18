@@ -35,4 +35,5 @@ module "talos_cluster" {
   cluster_endpoint   = var.cluster_endpoint
   cluster_api_host   = var.cluster_api_host
   tailscale_auth_key = var.tailscale_auth_key
+  cilium_version     = var.cilium_version
 }
