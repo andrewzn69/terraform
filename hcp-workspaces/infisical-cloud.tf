@@ -38,3 +38,15 @@ resource "tfe_variable" "infisical_client_secret" {
     ignore_changes = [value]
   }
 }
+
+resource "tfe_variable" "infisical_organization_id" {
+  workspace_id = tfe_workspace.infisical_cloud.id
+  key          = "organization_id"
+  value        = ""
+  category     = "terraform"
+  sensitive    = false
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
