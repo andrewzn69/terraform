@@ -106,6 +106,12 @@ resource "talos_machine_bootstrap" "this" {
 
   depends_on = [talos_machine_configuration_apply.control_plane]
 
+  lifecycle {
+    replace_triggered_by = [
+      proxmox_virtual_environment_vm.control_plane_vm
+    ]
+  }
+
   timeouts = {
     create = "10m"
     update = "10m"
