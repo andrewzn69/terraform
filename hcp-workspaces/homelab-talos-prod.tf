@@ -74,7 +74,7 @@ resource "tfe_variable" "proxmox_bridge" {
 resource "tfe_variable" "proxmox_token_id" {
   workspace_id = tfe_workspace.homelab_talos_prod.id
   key          = "proxmox_token_id"
-  value        = var.proxmox_token_id
+  value        = ""
   category     = "terraform"
   sensitive    = true
 
@@ -86,7 +86,7 @@ resource "tfe_variable" "proxmox_token_id" {
 resource "tfe_variable" "proxmox_token_secret" {
   workspace_id = tfe_workspace.homelab_talos_prod.id
   key          = "proxmox_token_secret"
-  value        = var.proxmox_token_secret
+  value        = ""
   category     = "terraform"
   sensitive    = true
 
@@ -220,18 +220,6 @@ resource "tfe_variable" "cluster_endpoint" {
   key          = "cluster_endpoint"
   value        = "https://192.168.1.10:6443"
   category     = "terraform"
-}
-
-resource "tfe_variable" "tailscale_auth_key" {
-  workspace_id = tfe_workspace.homelab_talos_prod.id
-  key          = "tailscale_auth_key"
-  value        = var.tailscale_auth_key
-  category     = "terraform"
-  sensitive    = true
-
-  lifecycle {
-    ignore_changes = [value]
-  }
 }
 
 resource "tfe_variable" "cilium_version" {
