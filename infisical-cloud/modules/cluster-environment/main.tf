@@ -36,19 +36,9 @@ resource "infisical_secret_folder" "observability" {
 
 # machine identity for kubernetes operator
 resource "infisical_identity" "k8s_operator" {
-  name            = "${var.cluster_name}-k8s-operator"
-  organization_id = var.project_id
-  role            = "no-access"
-}
-
-# grant identity access to this project
-resource "infisical_identity_project_membership" "k8s_operator" {
-  identity_id = infisical_identity.k8s_operator.id
-  project_id  = var.project_id
-
-  roles = [{
-    role_slug = "member"
-  }]
+  name   = "${var.cluster_name}-k8s-operator"
+  org_id = var.organization_id
+  role   = "no-access"
 }
 
 # enable universal auth on identity
@@ -64,8 +54,6 @@ resource "infisical_identity_universal_auth" "k8s_operator" {
 
 # generate client secret
 resource "infisical_identity_universal_auth_client_secret" "k8s_operator" {
-  identity_universal_auth_id = infisical_identity_universal_auth.k8s_operator.id
-  description                = "Kubernetes operator credentials for ${var.cluster_name}"
-  ttl_seconds                = 0 # never expires
-  num_uses_limit             = 0 # unlimited uses
+  identity_id = infisical_identity.k8s_operator.id
+  description = "Kubernetes operator credentials for ${var.cluster_name}"
 }

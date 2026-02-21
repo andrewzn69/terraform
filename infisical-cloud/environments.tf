@@ -1,9 +1,10 @@
 module "homelab_env" {
   source = "./modules/cluster-environment"
 
-  project_id   = infisical_project.main.id
-  cluster_name = "homelab"
-  environment  = "production"
+  project_id      = infisical_project.main.id
+  organization_id = var.organization_id
+  cluster_name    = "homelab"
+  environment     = "production"
 }
 
 # TODO: setup oracle
