@@ -50,27 +50,3 @@ resource "tfe_variable" "infisical_org_id" {
     ignore_changes = [value]
   }
 }
-
-resource "tfe_variable" "infisical_project_name" {
-  workspace_id = tfe_workspace.infisical_cloud.id
-  key          = "project_name"
-  value        = ""
-  category     = "terraform"
-  sensitive    = false
-
-  lifecycle {
-    ignore_changes = [value]
-  }
-}
-
-resource "tfe_variable" "infisical_project_slug" {
-  workspace_id = tfe_workspace.infisical_cloud.id
-  key          = "project_slug"
-  value        = ""
-  category     = "terraform"
-  sensitive    = false
-
-  lifecycle {
-    ignore_changes = [value]
-  }
-}
