@@ -14,13 +14,3 @@ variable "org_id" {
   description = "Infisical organization ID"
   type        = string
 }
-
-variable "project_name" {
-  description = "Name of the Infisical project"
-  type        = string
-}
-
-variable "project_slug" {
-  description = "Slug for the Infisical project"
-  type        = string
-}

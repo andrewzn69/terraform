@@ -1,8 +1,3 @@
-variable "project_id" {
-  description = "The Infisical project ID"
-  type        = string
-}
-
 variable "org_id" {
   description = "The Infisical organization ID"
   type        = string
@@ -13,7 +8,12 @@ variable "cluster_name" {
   type        = string
 }
 
-variable "environment_name" {
-  description = "Environment name in Infisical"
+variable "project_name" {
+  description = "Display name for the Infisical project"
+  type        = string
+}
+
+variable "project_slug" {
+  description = "Slug for the Infisical project"
   type        = string
 }

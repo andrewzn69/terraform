@@ -1,3 +1,12 @@
+resource "infisical_project" "cluster" {
+  name        = var.project_name
+  slug        = var.project_slug
+  description = "Secret management for ${var.cluster_name} Kubernetes cluster"
+  type        = "secret-manager"
+
+  should_create_default_envs = true
+}
+
 # create machine identity for the cluster
 resource "infisical_identity" "cluster" {
   name   = "k8s-operator-${var.cluster_name}"
@@ -23,7 +32,7 @@ resource "infisical_identity_universal_auth_client_secret" "cluster" {
 
 # grant identity access to the project env
 resource "infisical_project_identity" "cluster" {
-  project_id  = var.project_id
+  project_id  = infisical_project.cluster.id
   identity_id = infisical_identity.cluster.id
 
   roles = [
@@ -31,12 +40,4 @@ resource "infisical_project_identity" "cluster" {
       role_slug = "viewer"
     }
   ]
-}
-
-# create cluster-specific folder
-resource "infisical_secret_folder" "cluster" {
-  project_id       = var.project_id
-  environment_slug = var.environment_name
-  folder_path      = "/"
-  name             = var.cluster_name
 }
