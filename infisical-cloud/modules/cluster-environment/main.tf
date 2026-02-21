@@ -1,59 +1,42 @@
-# create env for this cluster
-resource "infisical_project_environment" "this" {
-  project_id = var.project_id
-  name       = "${var.environment}-${var.cluster_name}"
-  slug       = "${var.environment}-${var.cluster_name}"
-}
-
-# folder structure
-resource "infisical_secret_folder" "infrastructure" {
-  project_id       = var.project_id
-  environment_slug = infisical_project_environment.this.slug
-  name             = "infrastructure"
-  path             = "/"
-}
-
-resource "infisical_secret_folder" "apps" {
-  project_id       = var.project_id
-  environment_slug = infisical_project_environment.this.slug
-  name             = "apps"
-  path             = "/"
-}
-
-resource "infisical_secret_folder" "media" {
-  project_id       = var.project_id
-  environment_slug = infisical_project_environment.this.slug
-  name             = "media"
-  path             = "/"
-}
-
-resource "infisical_secret_folder" "observability" {
-  project_id       = var.project_id
-  environment_slug = infisical_project_environment.this.slug
-  name             = "observability"
-  path             = "/"
-}
-
-# machine identity for kubernetes operator
-resource "infisical_identity" "k8s_operator" {
-  name   = "${var.cluster_name}-k8s-operator"
-  org_id = var.organization_id
+# create machine identity for the cluster
+resource "infisical_identity" "cluster" {
+  name   = "k8s-operator-${var.cluster_name}"
   role   = "no-access"
+  org_id = var.org_id
 }
 
-# enable universal auth on identity
-resource "infisical_identity_universal_auth" "k8s_operator" {
-  identity_id = infisical_identity.k8s_operator.id
+# configure universal auth for the identity
+resource "infisical_identity_universal_auth" "cluster" {
+  identity_id = infisical_identity.cluster.id
 
-  client_secret_trusts        = []
   access_token_ttl            = 7200
   access_token_max_ttl        = 7200
   access_token_num_uses_limit = 0
-  access_token_trusted_ips    = []
 }
 
-# generate client secret
-resource "infisical_identity_universal_auth_client_secret" "k8s_operator" {
-  identity_id = infisical_identity.k8s_operator.id
-  description = "Kubernetes operator credentials for ${var.cluster_name}"
+# generate client secret for auth
+resource "infisical_identity_universal_auth_client_secret" "cluster" {
+  identity_id = infisical_identity.cluster.id
+
+  depends_on = [infisical_identity_universal_auth.cluster]
+}
+
+# grant identity access to the project env
+resource "infisical_project_identity" "cluster" {
+  project_id  = var.project_id
+  identity_id = infisical_identity.cluster.id
+
+  roles = [
+    {
+      role_slug = "viewer"
+    }
+  ]
+}
+
+# create cluster-specific folder
+resource "infisical_secret_folder" "cluster" {
+  project_id       = var.project_id
+  environment_slug = var.environment_name
+  folder_path      = "/"
+  name             = var.cluster_name
 }

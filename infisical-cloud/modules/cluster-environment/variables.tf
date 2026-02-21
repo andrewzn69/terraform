@@ -1,20 +1,19 @@
 variable "project_id" {
-  description = "Infisical project ID"
+  description = "The Infisical project ID"
   type        = string
 }
 
-variable "organization_id" {
-  description = "Infisical organization ID"
+variable "org_id" {
+  description = "The Infisical organization ID"
   type        = string
 }
 
 variable "cluster_name" {
-  description = "Cluster name (homelab, oracle, aws)"
+  description = "Name of the Kubernetes cluster"
   type        = string
 }
 
-variable "environment" {
-  description = "Environment name (production, staging, dev)"
+variable "environment_name" {
+  description = "Environment name in Infisical"
   type        = string
-  default     = "production"
 }

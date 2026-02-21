@@ -1,20 +1,21 @@
-output "environment_slug" {
-  description = "Environment slug for this cluster"
-  value       = infisical_project_environment.this.slug
-}
-
 output "identity_id" {
-  description = "Machine identity ID"
-  value       = infisical_identity.k8s_operator.id
+  description = "The ID of the created identity"
+  value       = infisical_identity.cluster.id
 }
 
-output "identity_client_id" {
-  description = "Client ID for Kubernetes operator"
-  value       = infisical_identity_universal_auth.k8s_operator.client_id
-}
-
-output "identity_client_secret" {
-  description = "Client secret for Kubernetes operator"
-  value       = infisical_identity_universal_auth_client_secret.k8s_operator.client_secret
+output "client_id" {
+  description = "Client ID for Kubernetes operator authentication"
+  value       = infisical_identity_universal_auth_client_secret.cluster.client_id
   sensitive   = true
+}
+
+output "client_secret" {
+  description = "Client secret for Kubernetes operator authentication"
+  value       = infisical_identity_universal_auth_client_secret.cluster.client_secret
+  sensitive   = true
+}
+
+output "folder_id" {
+  description = "The ID of the cluster-specific folder"
+  value       = infisical_secret_folder.cluster.id
 }

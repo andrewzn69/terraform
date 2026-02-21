@@ -1,17 +1,17 @@
-module "homelab_env" {
-  source = "./modules/cluster-environment"
-
-  project_id      = infisical_project.main.id
-  organization_id = var.organization_id
-  cluster_name    = "homelab"
-  environment     = "production"
+# create shared folder for secrets used by all clusters
+resource "infisical_secret_folder" "shared" {
+  project_id       = infisical_project.kubernetes.id
+  environment_slug = "prod"
+  folder_path      = "/"
+  name             = "shared"
 }
 
-# TODO: setup oracle
-# module "oracle_env" {
-#   source = "./modules/cluster-environment"
-#
-#   project_id   = infisical_project.main.id
-#   cluster_name = oracle
-#   environment  = "production"
-# }
+# create vizima cluster env
+module "vizima" {
+  source = "./modules/cluster-environment"
+
+  project_id       = infisical_project.kubernetes.id
+  org_id           = var.org_id
+  cluster_name     = "vizima"
+  environment_name = "prod"
+}
