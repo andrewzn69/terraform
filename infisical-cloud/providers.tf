@@ -1,5 +1,5 @@
 provider "infisical" {
-  host = "https://app.infisical.com"
+  host = "https://eu.infisical.com"
 
   auth = {
     universal = {
