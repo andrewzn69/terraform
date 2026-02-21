@@ -39,9 +39,33 @@ resource "tfe_variable" "infisical_client_secret" {
   }
 }
 
-resource "tfe_variable" "infisical_organization_id" {
+resource "tfe_variable" "infisical_org_id" {
   workspace_id = tfe_workspace.infisical_cloud.id
-  key          = "organization_id"
+  key          = "org_id"
+  value        = ""
+  category     = "terraform"
+  sensitive    = false
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+resource "tfe_variable" "infisical_project_name" {
+  workspace_id = tfe_workspace.infisical_cloud.id
+  key          = "project_name"
+  value        = ""
+  category     = "terraform"
+  sensitive    = false
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+resource "tfe_variable" "infisical_project_slug" {
+  workspace_id = tfe_workspace.infisical_cloud.id
+  key          = "project_slug"
   value        = ""
   category     = "terraform"
   sensitive    = false
