@@ -55,14 +55,6 @@ resource "talos_machine_configuration_apply" "control_plane" {
       auth_key    = var.tailscale_auth_key
       node_subnet = var.node_subnet
     }) : "",
-    yamlencode({
-      cluster = {
-        inlineManifests = [{
-          name     = "cilium"
-          contents = data.helm_template.cilium.manifest
-        }]
-      }
-    })
   ]
 
   timeouts = {

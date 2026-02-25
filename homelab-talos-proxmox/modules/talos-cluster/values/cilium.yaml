@@ -46,3 +46,7 @@ securityContext:
       - NET_ADMIN
       - SYS_ADMIN
       - SYS_RESOURCE
+
+# enable gateway api support
+gatewayAPI:
+  enabled: true
