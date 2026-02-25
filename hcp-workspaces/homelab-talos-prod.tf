@@ -233,7 +233,7 @@ resource "tfe_variable" "github_app_id" {
 }
 
 resource "tfe_variable" "github_app_installation_id" {
-  workspace_id = twe_workspace.homelab_talos_prod.id
+  workspace_id = tfe_workspace.homelab_talos_prod.id
   key          = "github_app_installation_id"
   value        = ""
   category     = "terraform"
