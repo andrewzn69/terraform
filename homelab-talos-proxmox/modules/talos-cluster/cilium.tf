@@ -11,5 +11,5 @@ resource "helm_release" "cilium" {
 
   values = [file("${path.module}/values/cilium.yaml")]
 
-  depends_on = [talos_machine_bootstrap.this]
+  depends_on = [talos_cluster_kubeconfig.this]
 }
