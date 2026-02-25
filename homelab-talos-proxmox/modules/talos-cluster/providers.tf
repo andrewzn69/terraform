@@ -1,7 +1,7 @@
 # providers.tf - provider configurations for helm and argocd
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     host                   = talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.host
     client_certificate     = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.client_certificate)
     client_key             = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.client_key)
