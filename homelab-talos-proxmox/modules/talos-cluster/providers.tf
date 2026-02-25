@@ -18,6 +18,8 @@ provider "kubernetes" {
 
 provider "argocd" {
   server_addr = "${local.control_plane_private_ipv4_list[0]}:30080"
+  username    = "admin"
+  password    = local.argocd_admin_password
   plain_text  = true # http for bootstrap phase
   insecure    = true # skip tls verification
 }
