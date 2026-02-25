@@ -15,13 +15,6 @@ resource "helm_release" "argocd" {
   depends_on = [helm_release.cilium]
 }
 
-# configure argocd provider
-provider "argocd" {
-  server_addr = "${local.control_plane_private_ipv4_list[0]}:30080"
-  plain_text  = true # http for bootstrap phase
-  insecure    = true # skip tls verification
-}
-
 # add kubernetes repo with gh app auth
 resource "argocd_repository" "kubernetes" {
   repo                      = "https://github.com/andrewzn69/kubernetes"
