@@ -36,4 +36,9 @@ module "talos_cluster" {
   cluster_api_host   = var.cluster_api_host
   tailscale_auth_key = var.tailscale_auth_key
   cilium_version     = var.cilium_version
+
+  # argocd
+  github_app_id              = var.github_app_id
+  github_app_installation_id = var.github_app_installation_id
+  github_app_private_key     = var.github_app_private_key
 }

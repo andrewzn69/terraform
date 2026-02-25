@@ -144,4 +144,25 @@ variable "tailscale_auth_key" {
 
 variable "cilium_version" {
   description = "Cilium Helm chart version"
+  type        = string
+}
+
+# --- argocd ---
+
+variable "github_app_id" {
+  description = "GitHub App ID for ArgoCD repository authentication"
+  type        = string
+  sensitive   = true
+}
+
+variable "github_app_installation_id" {
+  description = "GitHub App Installation ID"
+  type        = string
+  sensitive   = true
+}
+
+variable "github_app_private_key" {
+  description = "GitHub App private key (PEM format)"
+  type        = string
+  sensitive   = true
 }
