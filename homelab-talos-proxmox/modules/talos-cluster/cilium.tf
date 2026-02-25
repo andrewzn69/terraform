@@ -1,3 +1,8 @@
+# wait for kubernetes api to be ready
+data "kubernetes_nodes" "wait" {
+  depends_on = [talos_cluster_kubeconfig.this]
+}
+
 resource "helm_release" "cilium" {
   name             = "cilium"
   repository       = "https://helm.cilium.io/"
@@ -11,5 +16,5 @@ resource "helm_release" "cilium" {
 
   values = [file("${path.module}/values/cilium.yaml")]
 
-  depends_on = [talos_cluster_kubeconfig.this]
+  depends_on = [data.kubernetes_nodes.wait]
 }
