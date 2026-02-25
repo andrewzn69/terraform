@@ -218,3 +218,39 @@ resource "tfe_variable" "cilium_version" {
   value        = "1.19.1"
   category     = "terraform"
 }
+
+# --- argocd ---
+
+resource "tfe_variable" "github_app_id" {
+  workspace_id = tfe_workspace.homelab_talos_prod.id
+  key          = "github_app_id"
+  value        = ""
+  category     = "terraform"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+resource "tfe_variable" "github_app_installation_id" {
+  workspace_id = twe_workspace.homelab_talos_prod.id
+  key          = "github_app_installation_id"
+  value        = ""
+  category     = "terraform"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+resource "tfe_variable" "github_app_private_key" {
+  workspace_id = tfe_workspace.homelab_talos_prod.id
+  key          = "github_app_private_key"
+  value        = ""
+  category     = "terraform"
+  sensitive    = true
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
