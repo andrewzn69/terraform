@@ -134,7 +134,7 @@ resource "tfe_variable" "control_plane_cpu" {
 resource "tfe_variable" "control_plane_memory" {
   workspace_id = tfe_workspace.homelab_talos_prod.id
   key          = "control_plane_memory"
-  value        = "2048"
+  value        = "4096"
   category     = "terraform"
 }
 
@@ -155,7 +155,7 @@ resource "tfe_variable" "worker_cpu" {
 resource "tfe_variable" "worker_memory" {
   workspace_id = tfe_workspace.homelab_talos_prod.id
   key          = "worker_memory"
-  value        = "6656"
+  value        = "5120"
   category     = "terraform"
 }
 
