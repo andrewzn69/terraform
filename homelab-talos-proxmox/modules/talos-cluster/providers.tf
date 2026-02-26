@@ -2,24 +2,30 @@
 
 provider "helm" {
   kubernetes = {
-    host                   = talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.host
-    client_certificate     = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.client_certificate)
-    client_key             = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.client_key)
-    cluster_ca_certificate = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.ca_certificate)
+    host                   = local.kube_config.host
+    client_certificate     = local.kube_config.client_certificate
+    client_key             = local.kube_config.client_key
+    cluster_ca_certificate = local.kube_config.cluster_ca_certificate
   }
 }
 
 provider "kubernetes" {
-  host                   = talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.host
-  client_certificate     = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.client_certificate)
-  client_key             = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.client_key)
-  cluster_ca_certificate = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.ca_certificate)
+  host                   = local.kube_config.host
+  client_certificate     = local.kube_config.client_certificate
+  client_key             = local.kube_config.client_key
+  cluster_ca_certificate = local.kube_config.cluster_ca_certificate
 }
 
 provider "argocd" {
-  server_addr = "${local.control_plane_private_ipv4_list[0]}:30080"
-  username    = "admin"
-  password    = local.argocd_admin_password
-  plain_text  = true # http for bootstrap phase
-  insecure    = true # skip tls verification
+  port_forward_with_namespace = "argocd"
+  plain_text                  = true # http for bootstrap phase
+  username                    = "admin"
+  password                    = local.argocd_admin_password
+
+  kubernetes {
+    host                   = local.kube_config.host
+    client_certificate     = local.kube_config.client_certificate
+    client_key             = local.kube_config.client_key
+    cluster_ca_certificate = local.kube_config.cluster_ca_certificate
+  }
 }

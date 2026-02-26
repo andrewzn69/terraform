@@ -33,6 +33,13 @@ locals {
   bootstrap_endpoint = local.control_plane_vms[0].ip
 
   total_memory_mb = (var.control_plane_vm_count * var.control_plane_memory) + ((var.number_of_vms - var.control_plane_vm_count) * var.worker_memory)
+
+  kube_config = {
+    host                   = talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.host
+    client_certificate     = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.client_certificate)
+    client_key             = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.client_key)
+    cluster_ca_certificate = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.ca_certificate)
+  }
 }
 
 resource "terraform_data" "validate_resources" {
