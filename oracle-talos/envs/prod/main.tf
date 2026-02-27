@@ -1,11 +1,16 @@
+module "talos_image" {
+  source = "../../modules/talos-image"
+
+  talos_version = var.talos_version
+}
+
 module "storage" {
   source = "../../modules/storage"
 
-  compartment_id    = var.compartment_id
-  bucket_name       = var.bucket_name
-  namespace         = var.namespace
-  image_object_name = var.image_object_name
-  image_source_path = var.image_source_path
+  compartment_id = var.compartment_id
+  namespace      = var.namespace
+  talos_version  = var.talos_version
+  disk_image_url = module.talos_image.disk_image_url
 }
 
 module "network" {
@@ -19,20 +24,26 @@ module "network" {
 module "compute" {
   source = "../../modules/compute"
 
-  # cluster config
-  cluster_name               = var.cluster_name
-  talos_version              = var.talos_version
-  talos_factory_schematic_id = var.talos_factory_schematic_id
-  tailscale_auth_key         = var.tailscale_auth_key
-  cluster_endpoint           = "https://${module.network.network_load_balancer_ip_addresses[0].ip_address}:6443"
-  load_balancer_ip           = module.network.network_load_balancer_ip_addresses[0].ip_address
-
   # infra
   compartment_id = var.compartment_id
   subnet_id      = module.network.subnet_id
   subnet_cidr    = var.subnet_cidr_block
 
-  # custom image
+  # load balancer
+  network_load_balancer_id      = module.network.network_load_balancer_id
+  talos_backend_set_name        = module.network.talos_backend_set_name
+  controlplane_backend_set_name = module.network.controlplane_backend_set_name
+
+  # ports
+  talos_backend_port        = var.talos_backend_port
+  controlplane_backend_port = var.controlplane_backend_port
+
+  # instance config
+  instance_shape                       = var.instance_shape
+  instance_launch_options_network_type = var.instance_launch_options_network_type
+  boot_volume_size_gb                  = var.boot_volume_size_gb
+
+  # image
   custom_image_id = module.storage.custom_image_id
 
   # controlplane pool
@@ -46,18 +57,19 @@ module "compute" {
   worker_memory_gb           = var.worker_memory_gb
   worker_ocpus               = var.worker_ocpus
   worker_base_ip_offset      = var.worker_base_ip_offset
-  worker_boot_volume_size_gb = var.worker_boot_volume_size_gb
+  worker_data_volume_size_gb = var.worker_data_volume_size_gb
 
-  # load balancer backend registration
-  network_load_balancer_id      = module.network.network_load_balancer_id
-  talos_backend_set_name        = module.network.talos_backend_set_name
-  controlplane_backend_set_name = module.network.controlplane_backend_set_name
-}
+  # cluster config
+  cluster_name        = var.cluster_name
+  talos_version       = var.talos_version
+  installer_image_url = module.talos_image.installer_url
+  tailscale_auth_key  = var.tailscale_auth_key
+  cluster_endpoint    = "https://${module.network.network_load_balancer_ip_addresses[0].ip_address}:6443"
+  load_balancer_ip    = module.network.network_load_balancer_ip_addresses[0].ip_address
+  cilium_version      = var.cilium_version
 
-module "game_servers" {
-  source = "../../modules/game-servers"
-
-  compartment_id           = var.compartment_id
-  network_load_balancer_id = module.network.network_load_balancer_id
-  worker_instance_ids      = module.compute.worker_instance_ids
+  # free tier limits
+  free_tier_memory_limit     = var.free_tier_memory_limit
+  free_tier_ocpu_limit       = var.free_tier_ocpu_limit
+  free_tier_storage_limit_gb = var.free_tier_storage_limit_gb
 }
