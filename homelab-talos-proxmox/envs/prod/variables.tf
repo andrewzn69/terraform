@@ -126,11 +126,6 @@ variable "talos_version" {
   type        = string
 }
 
-variable "kubernetes_version" {
-  description = "Kubernetes version to deploy"
-  type        = string
-}
-
 variable "cluster_name" {
   description = "Name of the Talos cluster"
   type        = string

@@ -189,13 +189,6 @@ resource "tfe_variable" "talos_version" {
   category     = "terraform"
 }
 
-resource "tfe_variable" "kubernetes_version" {
-  workspace_id = tfe_workspace.homelab_talos_prod.id
-  key          = "kubernetes_version"
-  value        = "v1.35.0"
-  category     = "terraform"
-}
-
 # --- cluster ---
 
 resource "tfe_variable" "cluster_name" {

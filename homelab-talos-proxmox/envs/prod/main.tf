@@ -30,7 +30,6 @@ module "talos_cluster" {
 
   # talos
   talos_version      = var.talos_version
-  kubernetes_version = var.kubernetes_version
   cluster_name       = var.cluster_name
   cluster_endpoint   = var.cluster_endpoint
   cluster_api_host   = var.cluster_api_host

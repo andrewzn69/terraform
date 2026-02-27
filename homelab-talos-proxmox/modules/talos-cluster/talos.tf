@@ -13,25 +13,23 @@ resource "talos_machine_secrets" "this" {
 }
 
 data "talos_machine_configuration" "control_plane" {
-  talos_version      = var.talos_version
-  cluster_name       = var.cluster_name
-  cluster_endpoint   = var.cluster_endpoint
-  kubernetes_version = var.kubernetes_version
-  machine_type       = "controlplane"
-  machine_secrets    = talos_machine_secrets.this.machine_secrets
-  docs               = false
-  examples           = false
+  talos_version    = var.talos_version
+  cluster_name     = var.cluster_name
+  cluster_endpoint = var.cluster_endpoint
+  machine_type     = "controlplane"
+  machine_secrets  = talos_machine_secrets.this.machine_secrets
+  docs             = false
+  examples         = false
 }
 
 data "talos_machine_configuration" "worker" {
-  talos_version      = var.talos_version
-  cluster_name       = var.cluster_name
-  cluster_endpoint   = var.cluster_endpoint
-  kubernetes_version = var.kubernetes_version
-  machine_type       = "worker"
-  machine_secrets    = talos_machine_secrets.this.machine_secrets
-  docs               = false
-  examples           = false
+  talos_version    = var.talos_version
+  cluster_name     = var.cluster_name
+  cluster_endpoint = var.cluster_endpoint
+  machine_type     = "worker"
+  machine_secrets  = talos_machine_secrets.this.machine_secrets
+  docs             = false
+  examples         = false
 }
 
 data "talos_client_configuration" "this" {
