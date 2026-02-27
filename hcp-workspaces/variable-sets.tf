@@ -16,6 +16,13 @@ resource "tfe_variable" "tailscale_auth_key" {
   }
 }
 
+resource "tfe_variable" "talos_version" {
+  key             = "talos_version"
+  value           = "v1.12.3"
+  category        = "terraform"
+  variable_set_id = tfe_variable_set.shared_credentials.id
+}
+
 resource "tfe_variable" "cilium_version" {
   key             = "cilium_version"
   value           = "1.19.1"
