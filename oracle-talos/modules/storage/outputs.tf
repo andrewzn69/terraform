@@ -20,11 +20,5 @@ output "object_name" {
 
 output "custom_image_id" {
   description = "OCID of the custom Talos image"
-  value       = oci_core_image.talos_image.id
+  value       = oci_core_image.talos.id
 }
-
-output "object_url" {
-  description = "URL of the uploaded object"
-  value       = "https://objectstorage.${oci_objectstorage_bucket.talos_images.namespace}.oraclecloud.com/n/${oci_objectstorage_bucket.talos_images.namespace}/b/${oci_objectstorage_bucket.talos_images.name}/o/${oci_objectstorage_object.talos_image.object}"
-}
-
