@@ -205,13 +205,6 @@ resource "tfe_variable" "cluster_endpoint" {
   category     = "terraform"
 }
 
-resource "tfe_variable" "cilium_version" {
-  workspace_id = tfe_workspace.homelab_talos_prod.id
-  key          = "cilium_version"
-  value        = "1.19.1"
-  category     = "terraform"
-}
-
 # --- argocd ---
 
 resource "tfe_variable" "github_app_id" {
