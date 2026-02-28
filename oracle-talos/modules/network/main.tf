@@ -1,40 +1,66 @@
 resource "oci_core_vcn" "talos_vcn" {
   compartment_id = var.compartment_id
   cidr_blocks    = [var.vcn_cidr_blocks]
-  display_name   = var.vcn_display_name
-  dns_label      = var.vcn_dns_label
+  display_name   = "${var.cluster_name}-vcn"
+  dns_label      = "${var.cluster_name}vcn"
 }
 
 resource "oci_core_internet_gateway" "talos_internet_gateway" {
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.talos_vcn.id
-  enabled        = var.internet_gateway_enabled
-  display_name   = var.internet_gateway_display_name
+  enabled        = true
+  display_name   = "${var.cluster_name}-igw"
 }
 
 resource "oci_core_route_table" "talos_route_table" {
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.talos_vcn.id
-  display_name   = var.route_table_display_name
+  display_name   = "${var.cluster_name}-route-table"
+
   route_rules {
     network_entity_id = oci_core_internet_gateway.talos_internet_gateway.id
-    destination       = var.route_table_route_rules_destination
-    destination_type  = var.route_table_route_rules_destination_type
+    destination       = "0.0.0.0/0"
+    destination_type  = "CIDR_BLOCK"
   }
 }
 
 resource "oci_core_security_list" "talos_security_list" {
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.talos_vcn.id
-  display_name   = var.security_list_display_name
+  display_name   = "${var.cluster_name}-security-list"
+
   egress_security_rules {
-    destination      = var.security_list_egress_security_rules_destination
-    protocol         = var.security_list_egress_security_rules_protocol
-    destination_type = var.security_list_egress_security_rules_destination_type
+    destination      = "0.0.0.0/0"
+    protocol         = "all"
+    destination_type = "CIDR_BLOCK"
   }
+
   ingress_security_rules {
-    protocol = var.security_list_ingress_security_rules_protocol
-    source   = var.security_list_ingress_security_rules_source
+    protocol = "6"
+    source   = "0.0.0.0/0"
+    tcp_options {
+      min = var.talos_listener_port
+      max = var.talos_listener_port
+    }
+  }
+
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+    tcp_options {
+      min = var.controlplane_listener_port
+      max = var.controlplane_listener_port
+    }
+  }
+
+  ingress_security_rules {
+    protocol = "all"
+    source   = var.vcn_cidr_blocks
+  }
+
+  ingress_security_rules {
+    protocol = "1"
+    source   = "0.0.0.0/0"
   }
 }
 
@@ -42,78 +68,58 @@ resource "oci_core_subnet" "talos_subnet" {
   cidr_block        = var.subnet_cidr_block
   compartment_id    = var.compartment_id
   vcn_id            = oci_core_vcn.talos_vcn.id
-  display_name      = var.subnet_display_name
-  dns_label         = var.subnet_dns_label
+  display_name      = "${var.cluster_name}-subnet"
+  dns_label         = "${var.cluster_name}subnet"
   route_table_id    = oci_core_route_table.talos_route_table.id
   security_list_ids = [oci_core_security_list.talos_security_list.id]
 }
 
 resource "oci_network_load_balancer_network_load_balancer" "controlplane_load_balancer" {
   compartment_id                 = var.compartment_id
-  display_name                   = var.network_load_balancer_display_name
+  display_name                   = "${var.cluster_name}-lb"
   subnet_id                      = oci_core_subnet.talos_subnet.id
-  is_preserve_source_destination = var.network_load_balancer_is_preserve_source_destination
-  is_private                     = var.network_load_balancer_is_private
+  is_preserve_source_destination = false
+  is_private                     = false
 }
 
 resource "oci_network_load_balancer_backend_set" "talos_backend_set" {
   health_checker {
-    protocol           = var.talos_health_checker_protocol
-    interval_in_millis = var.talos_health_checker_interval_in_millis
-    port               = var.talos_health_checker_port
+    protocol           = "TCP"
+    interval_in_millis = 10000
+    port               = var.talos_listener_port
   }
-  name                     = var.talos_backend_set_name
+  name                     = "${var.cluster_name}-talos"
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.id
-  policy                   = var.backend_set_policy
-  is_preserve_source       = var.talos_backend_set_is_preserve_source
+  policy                   = "TWO_TUPLE"
+  is_preserve_source       = false
 }
 
 resource "oci_network_load_balancer_backend_set" "controlplane_backend_set" {
   health_checker {
-    protocol           = var.controlplane_health_checker_protocol
-    interval_in_millis = var.controlplane_health_checker_interval_in_millis
-    port               = var.controlplane_health_checker_port
-    return_code        = var.controlplane_health_checker_return_code
-    url_path           = var.controlplane_health_checker_url_path
+    protocol           = "HTTPS"
+    interval_in_millis = 10000
+    port               = var.controlplane_listener_port
+    return_code        = 401
+    url_path           = "/readyz"
   }
-  name                     = var.controlplane_backend_set_name
+  name                     = "controlplane"
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.id
-  policy                   = var.backend_set_policy
-  is_preserve_source       = var.controlplane_backend_set_is_preserve_source
+  policy                   = "TWO_TUPLE"
+  is_preserve_source       = false
 }
 
 resource "oci_network_load_balancer_listener" "talos_listener" {
   default_backend_set_name = oci_network_load_balancer_backend_set.talos_backend_set.name
-  name                     = var.talos_listener_name
+  name                     = "${var.cluster_name}-talos"
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.id
   port                     = var.talos_listener_port
-  protocol                 = var.talos_listener_protocol
+  protocol                 = "TCP"
 }
 
 resource "oci_network_load_balancer_listener" "controlplane_listener" {
   default_backend_set_name = oci_network_load_balancer_backend_set.controlplane_backend_set.name
-  name                     = var.controlplane_listener_name
+  name                     = "controlplane"
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.id
   port                     = var.controlplane_listener_port
-  protocol                 = var.controlplane_listener_protocol
+  protocol                 = "TCP"
 }
-
-# resource "oci_network_load_balancer_backend_set" "minecraft_backend_set" {
-#   health_checker {
-#     protocol           = var.minecraft_health_checker_protocol
-#     interval_in_millis = var.minecraft_health_checker_interval_in_millis
-#     port               = var.minecraft_health_checker_port
-#   }
-#   name                     = var.minecraft_backend_set_name
-#   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.id
-#   policy                   = var.backend_set_policy
-#   is_preserve_source       = var.minecraft_backend_set_is_preserve_source
-# }
-#
-# resource "oci_network_load_balancer_listener" "minecraft_listener" {
-#   default_backend_set_name = oci_network_load_balancer_backend_set.minecraft_backend_set.name
-#   name                     = var.minecraft_listener_name
-#   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.id
-#   port                     = var.minecraft_listener_port
-#   protocol                 = var.minecraft_listener_protocol
-# }

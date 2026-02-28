@@ -16,9 +16,12 @@ module "storage" {
 module "network" {
   source = "../../modules/network"
 
-  compartment_id    = var.compartment_id
-  vcn_cidr_blocks   = var.vcn_cidr_blocks
-  subnet_cidr_block = var.subnet_cidr_block
+  compartment_id             = var.compartment_id
+  cluster_name               = var.cluster_name
+  vcn_cidr_blocks            = var.vcn_cidr_blocks
+  subnet_cidr_block          = var.subnet_cidr_block
+  talos_listener_port        = var.talos_backend_port
+  controlplane_listener_port = var.controlplane_backend_port
 }
 
 module "compute" {
