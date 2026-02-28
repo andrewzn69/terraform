@@ -119,7 +119,7 @@ resource "tfe_variable" "subnet_cidr_block" {
 
 # --- cluster ---
 
-resource "tfe_variable" "cluster_name" {
+resource "tfe_variable" "oci_cluster_name" {
   workspace_id = tfe_workspace.oracle_talos_prod.id
   key          = "cluster_name"
   value        = "novigrad"
