@@ -25,3 +25,8 @@ variable "disk_image_url" {
   description = "QCOW2 disk image URL to download from Talos factory"
   type        = string
 }
+
+variable "region" {
+  description = "OCI region"
+  type        = string
+}

@@ -15,7 +15,7 @@ output "bucket_namespace" {
 
 output "object_name" {
   description = "Name of the uploaded object"
-  value       = oci_objectstorage_object.talos_image.object
+  value       = "oracle-arm64-${var.talos_version}.qcow2"
 }
 
 output "custom_image_id" {

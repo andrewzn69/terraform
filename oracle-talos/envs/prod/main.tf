@@ -11,6 +11,7 @@ module "storage" {
   namespace      = var.namespace
   talos_version  = var.talos_version
   disk_image_url = module.talos_image.disk_image_url
+  region         = var.region
 }
 
 module "network" {
