@@ -180,15 +180,6 @@ resource "tfe_variable" "worker_data_disk_size" {
   category     = "terraform"
 }
 
-# --- talos ---
-
-resource "tfe_variable" "talos_version" {
-  workspace_id = tfe_workspace.homelab_talos_prod.id
-  key          = "talos_version"
-  value        = "v1.12.3"
-  category     = "terraform"
-}
-
 # --- cluster ---
 
 resource "tfe_variable" "cluster_name" {
