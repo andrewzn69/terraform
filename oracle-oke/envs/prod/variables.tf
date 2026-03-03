@@ -41,10 +41,16 @@ variable "vcn_cidr_block" {
   default     = "10.0.0.0/16"
 }
 
-variable "subnet_cidr_block" {
-  description = "CIDR block for the subnet"
+variable "endpoint_subnet_cidr_block" {
+  description = "CIDR block for the cluster endpoint and LB subnet"
   type        = string
   default     = "10.0.0.0/24"
+}
+
+variable "nodes_subnet_cidr_block" {
+  description = "CIDR block for the worker nodes subnet"
+  type        = string
+  default     = "10.0.1.0/24"
 }
 
 # --- cluster ---
@@ -91,7 +97,7 @@ variable "node_boot_volume_size_gb" {
 variable "node_block_volume_size_gb" {
   description = "Block volume size in GB per worker node"
   type        = number
-  default     = 45
+  default     = 50
 }
 
 # --- networking ---

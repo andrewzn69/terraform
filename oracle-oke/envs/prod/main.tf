@@ -1,19 +1,21 @@
 module "network" {
   source = "../../modules/network"
 
-  compartment_id    = var.compartment_id
-  cluster_name      = var.cluster_name
-  vcn_cidr_block    = var.vcn_cidr_block
-  subnet_cidr_block = var.subnet_cidr_block
+  compartment_id             = var.compartment_id
+  cluster_name               = var.cluster_name
+  vcn_cidr_block             = var.vcn_cidr_block
+  endpoint_subnet_cidr_block = var.endpoint_subnet_cidr_block
+  nodes_subnet_cidr_block    = var.nodes_subnet_cidr_block
 }
 
 module "oke" {
   source = "../../modules/oke"
 
-  compartment_id = var.compartment_id
-  cluster_name   = var.cluster_name
-  vcn_id         = module.network.vcn_id
-  subnet_id      = module.network.subnet_id
+  compartment_id     = var.compartment_id
+  cluster_name       = var.cluster_name
+  vcn_id             = module.network.vcn_id
+  endpoint_subnet_id = module.network.endpoint_subnet_id
+  nodes_subnet_id    = module.network.nodes_subnet_id
 
   kubernetes_version        = var.kubernetes_version
   node_count                = var.node_count
