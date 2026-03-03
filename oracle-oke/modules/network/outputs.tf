@@ -3,7 +3,12 @@ output "vcn_id" {
   value       = oci_core_vcn.main.id
 }
 
-output "subnet_id" {
-  description = "OCID of the subnet"
-  value       = oci_core_subnet.main.id
+output "endpoint_subnet_id" {
+  description = "OCID of the cluster endpoint and LB subnet"
+  value       = oci_core_subnet.endpoint.id
+}
+
+output "nodes_subnet_id" {
+  description = "OCID of the worker nodes subnet"
+  value       = oci_core_subnet.nodes.id
 }

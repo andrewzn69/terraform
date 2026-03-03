@@ -62,12 +62,22 @@ resource "oci_core_security_list" "main" {
   }
 }
 
-resource "oci_core_subnet" "main" {
+resource "oci_core_subnet" "endpoint" {
   compartment_id    = var.compartment_id
   vcn_id            = oci_core_vcn.main.id
-  display_name      = "${var.cluster_name}-subnet"
-  cidr_block        = var.subnet_cidr_block
+  display_name      = "${var.cluster_name}-endpoint-subnet"
+  cidr_block        = var.endpoint_subnet_cidr_block
   route_table_id    = oci_core_route_table.main.id
   security_list_ids = [oci_core_security_list.main.id]
-  dns_label         = "main"
+  dns_label         = "endpoint"
+}
+
+resource "oci_core_subnet" "nodes" {
+  compartment_id    = var.compartment_id
+  vcn_id            = oci_core_vcn.main.id
+  display_name      = "${var.cluster_name}-nodes-subnet"
+  cidr_block        = var.nodes_subnet_cidr_block
+  route_table_id    = oci_core_route_table.main.id
+  security_list_ids = [oci_core_security_list.main.id]
+  dns_label         = "nodes"
 }

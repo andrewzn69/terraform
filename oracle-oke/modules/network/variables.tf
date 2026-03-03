@@ -13,7 +13,12 @@ variable "vcn_cidr_block" {
   type        = string
 }
 
-variable "subnet_cidr_block" {
-  description = "CIDR block for the subnet"
+variable "endpoint_subnet_cidr_block" {
+  description = "CIDR block for the cluster endpoint and LB subnet"
+  type        = string
+}
+
+variable "nodes_subnet_cidr_block" {
+  description = "CIDR block for the worker nodes subnet"
   type        = string
 }
