@@ -7,7 +7,7 @@ resource "oci_core_vcn" "main" {
 
 resource "oci_core_internet_gateway" "main" {
   compartment_id = var.compartment_id
-  vcn_id         = oci_core_vcn.main
+  vcn_id         = oci_core_vcn.main.id
   display_name   = "${var.cluster_name}-igw"
   enabled        = true
 }
@@ -18,7 +18,7 @@ resource "oci_core_route_table" "main" {
   display_name   = "${var.cluster_name}-rt"
 
   route_rules {
-    description       = "0.0.0.0/0"
+    destination       = "0.0.0.0/0"
     destination_type  = "CIDR_BLOCK"
     network_entity_id = oci_core_internet_gateway.main.id
   }
@@ -37,7 +37,7 @@ resource "oci_core_security_list" "main" {
 
   ingress_security_rules {
     source    = "0.0.0.0/0"
-    protocol  = 6
+    protocol  = "6"
     stateless = false
     tcp_options {
       min = 6443
