@@ -7,7 +7,7 @@ provider "oci" {
 }
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     config_raw = module.oke.kubeconfig
   }
 }
