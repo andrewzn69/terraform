@@ -29,11 +29,11 @@ resource "oci_containerengine_cluster" "main" {
 
   endpoint_config {
     is_public_ip_enabled = true
-    subnet_id            = var.subnet_id
+    subnet_id            = var.endpoint_subnet_id
   }
 
   options {
-    service_lb_subnet_ids = [var.subnet_id]
+    service_lb_subnet_ids = [var.endpoint_subnet_id]
 
     add_ons {
       is_kubernetes_dashboard_enabled = false
@@ -75,7 +75,7 @@ resource "oci_containerengine_node_pool" "workers" {
 
     placement_configs {
       availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
-      subnet_id           = var.subnet_id
+      subnet_id           = var.nodes_subnet_id
     }
   }
 

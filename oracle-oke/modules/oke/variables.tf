@@ -12,8 +12,13 @@ variable "vcn_id" {
   type        = string
 }
 
-variable "subnet_id" {
-  description = "OCID of the subnet"
+variable "endpoint_subnet_id" {
+  description = "OCID of the cluster endpoint and LB subnet"
+  type        = string
+}
+
+variable "nodes_subnet_id" {
+  description = "OCID of the worker nodes subnet"
   type        = string
 }
 
