@@ -1,0 +1,5 @@
+#cloud-config
+runcmd:
+  - yum install -y nfs-utils
+  - curl -fsSL https://tailscale.com/install.sh | sh
+  - tailscale up --authkey=${tailscale_auth_key} --advertise-routes=${pods_cidr},${services_cidr} --accept-routes --accept-dns=false
