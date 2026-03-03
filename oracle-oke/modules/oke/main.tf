@@ -2,19 +2,18 @@ data "oci_identity_availability_domains" "ads" {
   compartment_id = var.compartment_id
 }
 
-data "oci_core_images" "oke_node_image" {
-  compartment_id           = var.compartment_id
-  operating_system         = "Oracle Linux"
-  operating_system_version = "8"
-  shape                    = "VM.Standard.A1.Flex"
-  sort_by                  = "TIMECREATED"
-  sort_order               = "DESC"
+data "oci_containerengine_node_pool_option" "main" {
+  node_pool_option_id = "all"
+  compartment_id      = var.compartment_id
+}
 
-  filter {
-    name   = "display_name"
-    values = [".*OKE-${replace(trimprefix(var.kubernetes_version, "v"), ".", "\\.")}.*"]
-    regex  = true
-  }
+locals {
+  k8s_version_short = trimprefix(var.kubernetes_version, "v")
+  node_image_id = [
+    for source in data.oci_containerengine_node_pool_option.main.sources :
+    source.image_id
+    if can(regex("aarch64.*OKE-${replace(local.k8s_version_short, ".", "\\.")}", source.source_name))
+  ][0]
 }
 
 resource "oci_containerengine_cluster" "main" {
@@ -62,7 +61,7 @@ resource "oci_containerengine_node_pool" "workers" {
 
   node_source_details {
     source_type             = "IMAGE"
-    image_id                = data.oci_core_images.oke_node_image.images[0].id
+    image_id                = local.node_image_id
     boot_volume_size_in_gbs = var.node_boot_volume_size_gb
   }
 
