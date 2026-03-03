@@ -80,7 +80,7 @@ resource "oci_containerengine_node_pool" "workers" {
   }
 
   node_metadata = {
-    user_data = base64encode(templatefile("${path.module}/cloud-init.yaml", {
+    user_data = base64encode(templatefile("${path.module}/cloud-init.sh", {
       tailscale_auth_key = var.tailscale_auth_key
       pods_cidr          = var.pods_cidr
       services_cidr      = var.services_cidr
