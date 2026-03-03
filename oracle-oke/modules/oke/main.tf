@@ -91,7 +91,7 @@ resource "oci_containerengine_node_pool" "workers" {
   ssh_public_key = var.ssh_public_key
 }
 
-data "oci_containerengine_node_pool_nodes" "workers" {
+data "oci_containerengine_node_pool" "workers" {
   node_pool_id = oci_containerengine_node_pool.workers.id
 }
 
@@ -106,7 +106,7 @@ resource "oci_core_volume" "worker_block" {
 resource "oci_core_volume_attachment" "worker_block" {
   count           = var.node_count
   attachment_type = "paravirtualized"
-  instance_id     = data.oci_containerengine_node_pool_nodes.workers.nodes[count.index].id
+  instance_id     = data.oci_containerengine_node_pool.workers.nodes[count.index].id
   volume_id       = oci_core_volume.worker_block[count.index].id
   display_name    = "${var.cluster_name}-worker-${count.index}-block-attach"
 }
