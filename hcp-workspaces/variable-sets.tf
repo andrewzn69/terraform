@@ -35,7 +35,7 @@ resource "tfe_workspace_variable_set" "homelab_talos_prod" {
   variable_set_id = tfe_variable_set.shared_credentials.id
 }
 
-resource "tfe_workspace_variable_set" "oracle_talos_prod" {
-  workspace_id    = tfe_workspace.oracle_talos_prod.id
+resource "tfe_workspace_variable_set" "oracle_oke_prod" {
+  workspace_id    = tfe_workspace.oracle_oke_prod.id
   variable_set_id = tfe_variable_set.shared_credentials.id
 }

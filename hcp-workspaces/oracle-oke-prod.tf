@@ -79,20 +79,4 @@ resource "tfe_variable" "oke_kubernetes_version" {
   category     = "terraform"
 }
 
-resource "tfe_variable" "oke_cilium_version" {
-  workspace_id = tfe_workspace.oracle_oke_prod.id
-  key          = "cilium_version"
-  value        = "1.17.2"
-  category     = "terraform"
-}
 
-# --- tailscale ---
-
-resource "tfe_variable" "oke_tailscale_auth_key" {
-  workspace_id = tfe_workspace.oracle_oke_prod.id
-  key          = "tailscale_auth_key"
-  value        = ""
-  category     = "terraform"
-  sensitive    = true
-  lifecycle { ignore_changes = [value] }
-}
