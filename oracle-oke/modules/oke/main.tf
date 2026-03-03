@@ -111,7 +111,6 @@ resource "oci_core_volume_attachment" "worker_block" {
 }
 
 data "oci_containerengine_cluster_kube_config" "main" {
-  cluster_id    = oci_containerengine_cluster.main.id
-  endpoint      = "PUBLIC_ENDPOINT"
-  token_version = "1.0.0"
+  cluster_id = oci_containerengine_cluster.main.id
+  endpoint   = "PUBLIC_ENDPOINT"
 }
