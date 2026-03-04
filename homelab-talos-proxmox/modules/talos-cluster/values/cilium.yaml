@@ -50,3 +50,11 @@ securityContext:
 # enable gateway api support
 gatewayAPI:
   enabled: true
+
+# enable hubble for observability and traffic visualization
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+  ui:
+    enabled: true
