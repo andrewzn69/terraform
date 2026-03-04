@@ -151,6 +151,13 @@ variable "services_cidr" {
   }
 }
 
+# --- cilium ---
+
+variable "cilium_version" {
+  description = "Cilium Helm chart version"
+  type        = string
+}
+
 # --- tailscale ---
 
 variable "tailscale_auth_key" {
