@@ -25,10 +25,6 @@ data "kubernetes_secret_v1" "argocd_initial_password" {
   depends_on = [helm_release.argocd]
 }
 
-locals {
-  argocd_admin_password = data.kubernetes_secret_v1.argocd_initial_password.data["password"]
-}
-
 # add kubernetes repo with gh app auth
 resource "argocd_repository" "kubernetes" {
   repo                      = "https://github.com/andrewzn69/kubernetes"

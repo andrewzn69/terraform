@@ -20,7 +20,7 @@ provider "argocd" {
   port_forward_with_namespace = "argocd"
   plain_text                  = true # http for bootstrap phase
   username                    = "admin"
-  password                    = local.argocd_admin_password
+  password                    = data.kubernetes_secret_v1.argocd_initial_password.data["password"]
 
   kubernetes {
     host                   = local.kube_config.host
