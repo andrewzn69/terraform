@@ -3,6 +3,12 @@ resource "oci_core_vcn" "main" {
   display_name   = "${var.cluster_name}-vcn"
   cidr_blocks    = [var.vcn_cidr_block]
   dns_label      = var.cluster_name
+
+  freeform_tags = {
+    environment = "prod"
+    managed-by  = "terraform"
+    cluster     = var.cluster_name
+  }
 }
 
 resource "oci_core_internet_gateway" "main" {
@@ -60,6 +66,12 @@ resource "oci_core_subnet" "endpoint" {
   route_table_id    = oci_core_route_table.main.id
   security_list_ids = [oci_core_security_list.main.id]
   dns_label         = "endpoint"
+
+  freeform_tags = {
+    environment = "prod"
+    managed-by  = "terraform"
+    cluster     = var.cluster_name
+  }
 }
 
 resource "oci_core_subnet" "nodes" {
@@ -70,4 +82,10 @@ resource "oci_core_subnet" "nodes" {
   route_table_id    = oci_core_route_table.main.id
   security_list_ids = [oci_core_security_list.main.id]
   dns_label         = "nodes"
+
+  freeform_tags = {
+    environment = "prod"
+    managed-by  = "terraform"
+    cluster     = var.cluster_name
+  }
 }

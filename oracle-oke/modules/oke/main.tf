@@ -23,6 +23,12 @@ resource "oci_containerengine_cluster" "main" {
   vcn_id             = var.vcn_id
   type               = "BASIC_CLUSTER"
 
+  freeform_tags = {
+    environment = "prod"
+    managed-by  = "terraform"
+    cluster     = var.cluster_name
+  }
+
   cluster_pod_network_options {
     cni_type = "FLANNEL_OVERLAY"
   }
@@ -53,6 +59,12 @@ resource "oci_containerengine_node_pool" "workers" {
   kubernetes_version = var.kubernetes_version
   name               = "${var.cluster_name}-workers"
   node_shape         = "VM.Standard.A1.Flex"
+
+  freeform_tags = {
+    environment = "prod"
+    managed-by  = "terraform"
+    cluster     = var.cluster_name
+  }
 
   node_shape_config {
     ocpus         = var.node_ocpus
@@ -100,6 +112,12 @@ resource "oci_core_volume" "worker_block" {
   availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
   display_name        = "${var.cluster_name}-worker-${count.index}-block"
   size_in_gbs         = var.node_block_volume_size_gb
+
+  freeform_tags = {
+    environment = "prod"
+    managed-by  = "terraform"
+    cluster     = var.cluster_name
+  }
 }
 
 resource "oci_core_volume_attachment" "worker_block" {
