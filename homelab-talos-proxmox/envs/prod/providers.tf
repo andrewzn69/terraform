@@ -1,9 +1,12 @@
+# providers.tf - provider configuration for proxmox, helm, kubernetes, and argocd
+
 provider "proxmox" {
   endpoint  = "https://${var.proxmox_host_ip}:8006/"
   api_token = "${var.proxmox_token_id}=${var.proxmox_token_secret}"
   insecure  = true
 }
 
+# parse kubeconfig from module output for provider configuration
 locals {
   kube_config = try({
     host                   = module.talos_cluster.kubeconfig.host
@@ -13,6 +16,7 @@ locals {
   }, null)
 }
 
+# argocd initial admin password for provider auth
 data "kubernetes_secret_v1" "argocd_initial_password" {
   metadata {
     name      = "argocd-initial-admin-secret"

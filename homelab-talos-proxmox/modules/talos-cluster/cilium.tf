@@ -1,3 +1,5 @@
+# cilium.tf - deploys cilium cni after talos bootstrap
+
 # wait for kubernetes api to be ready
 data "kubernetes_nodes" "wait" {
   depends_on = [talos_cluster_kubeconfig.this]

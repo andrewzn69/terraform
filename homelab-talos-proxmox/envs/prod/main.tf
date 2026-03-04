@@ -1,4 +1,4 @@
-# main.tf - prod env entry point
+# main.tf - production environment for homelab talos cluster on proxmox
 
 module "talos_cluster" {
   source = "../../modules/talos-cluster"

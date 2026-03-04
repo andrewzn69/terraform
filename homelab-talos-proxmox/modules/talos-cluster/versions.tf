@@ -1,3 +1,5 @@
+# versions.tf - provider requirements for talos-cluster module
+
 terraform {
   required_version = ">=1.14.0"
   required_providers {
