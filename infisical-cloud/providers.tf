@@ -1,3 +1,5 @@
+# providers.tf - infisical provider configuration using eu region
+
 provider "infisical" {
   host = "https://eu.infisical.com"
 

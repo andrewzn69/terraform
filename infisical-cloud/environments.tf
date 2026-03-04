@@ -1,3 +1,5 @@
+# environments.tf - creates infisical projects and folder structures for each cluster
+
 # create vizima cluster project
 module "vizima" {
   source = "./modules/cluster-environment"

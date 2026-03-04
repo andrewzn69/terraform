@@ -1,3 +1,5 @@
+# variables.tf - infisical authentication variables
+
 variable "infisical_client_id" {
   description = "Infisical machine identity client ID for Terraform authentication"
   type        = string

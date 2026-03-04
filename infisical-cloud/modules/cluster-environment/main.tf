@@ -1,3 +1,5 @@
+# main.tf - creates infisical project and machine identity for k8s operator
+
 resource "infisical_project" "cluster" {
   name        = var.project_name
   slug        = var.project_slug

@@ -1,3 +1,5 @@
+# variables.tf - module inputs
+
 variable "org_id" {
   description = "The Infisical organization ID"
   type        = string
