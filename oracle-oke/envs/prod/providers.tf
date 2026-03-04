@@ -1,3 +1,7 @@
+# providers.tf - provider configuration for oracle cloud and kubernetes
+# configures oci provider with api key auth and helm/k8s providers with oci cli exec auth
+
+# oracle cloud infrastructure provider
 provider "oci" {
   tenancy_ocid = var.tenancy_ocid
   user_ocid    = var.user_ocid
@@ -6,12 +10,15 @@ provider "oci" {
   region       = var.region
 }
 
+# parse kubeconfig from oke module output for provider configuration
 locals {
   kubeconfig   = try(yamldecode(module.oke.kubeconfig), null)
   cluster_host = try(local.kubeconfig.clusters[0].cluster.server, "")
   cluster_ca   = try(base64decode(local.kubeconfig.clusters[0].cluster["certificate-authority-data"]), "")
 }
 
+# helm provider configured to use oci cli for authentication
+# exec block generates short-lived tokens for cluster access
 provider "helm" {
   kubernetes = {
     host                   = local.cluster_host
@@ -36,6 +43,7 @@ provider "helm" {
   }
 }
 
+# kubernetes provider configured to use oci cli for authentication
 provider "kubernetes" {
   host                   = local.cluster_host
   cluster_ca_certificate = local.cluster_ca

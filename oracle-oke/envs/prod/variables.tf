@@ -1,3 +1,5 @@
+# variables.tf - cluster configuration inputs
+
 # --- oci auth ---
 
 variable "tenancy_ocid" {

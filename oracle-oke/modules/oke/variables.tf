@@ -1,3 +1,5 @@
+# variables.tf - oke module inputs
+
 # --- oci ---
 
 variable "compartment_id" {

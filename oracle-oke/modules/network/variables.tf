@@ -1,3 +1,5 @@
+# variables.tf - network module inputs
+
 variable "compartment_id" {
   description = "OCID of the compartment"
   type        = string

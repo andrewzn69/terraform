@@ -1,3 +1,5 @@
+# cilium.tf - deploys cilium cni to replace flannel
+
 resource "helm_release" "cilium" {
   name             = "cilium"
   repository       = "https://helm.cilium.io/"
@@ -11,6 +13,7 @@ resource "helm_release" "cilium" {
 
   values = [file("${path.module}/values/cilium.yaml")]
 
+  # split cluster endpoint url into host and port for cilium config
   set = [
     {
       name  = "k8sServiceHost"

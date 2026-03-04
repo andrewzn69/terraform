@@ -1,3 +1,5 @@
+# main.tf - creates oke cluster, node pool, and block volumes
+
 data "oci_identity_availability_domains" "ads" {
   compartment_id = var.compartment_id
 }
@@ -9,6 +11,7 @@ data "oci_containerengine_node_pool_option" "main" {
 
 locals {
   k8s_version_short = trimprefix(var.kubernetes_version, "v")
+  # find the arm64 oke image id for the specified k8s version
   node_image_id = [
     for source in data.oci_containerengine_node_pool_option.main.sources :
     source.image_id

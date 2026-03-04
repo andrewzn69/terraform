@@ -1,3 +1,5 @@
+# main.tf - creates vcn, subnets, internet gateway, routing, and security lists
+
 resource "oci_core_vcn" "main" {
   compartment_id = var.compartment_id
   display_name   = "${var.cluster_name}-vcn"

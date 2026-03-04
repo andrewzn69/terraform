@@ -1,4 +1,7 @@
 #!/bin/bash
+# cloud-init.sh - node bootstrap script for oke worker nodes
+# installs nfs-utils and tailscale, runs oke init script
+
 set -e
 
 # oke bootstrap - has to run first for node registration

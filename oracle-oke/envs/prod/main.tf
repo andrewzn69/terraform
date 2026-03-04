@@ -1,3 +1,7 @@
+# main.tf - production environment configuration for oracle oke cluster
+# creates network infrastructure and oke cluster with cilium cni
+
+# create vcn, subnets, security lists, and routing for the cluster
 module "network" {
   source = "../../modules/network"
 
@@ -8,6 +12,7 @@ module "network" {
   nodes_subnet_cidr_block    = var.nodes_subnet_cidr_block
 }
 
+# create oke cluster, node pool, block volumes, and deploy cilium
 module "oke" {
   source = "../../modules/oke"
 
