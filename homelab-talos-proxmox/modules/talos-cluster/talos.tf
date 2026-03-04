@@ -44,7 +44,7 @@ resource "talos_machine_configuration_apply" "control_plane" {
   machine_configuration_input = data.talos_machine_configuration.control_plane.machine_configuration
   node                        = each.value.ip
 
-  config_patches = [
+  config_patches = compact([
     templatefile("${path.module}/patches/controlplane.yaml.tpl", {
       installer_image = local.talos_installer_image
       node_subnet     = var.node_subnet
@@ -53,7 +53,7 @@ resource "talos_machine_configuration_apply" "control_plane" {
       auth_key    = var.tailscale_auth_key
       node_subnet = var.node_subnet
     }) : "",
-  ]
+  ])
 
   timeouts = {
     create = "10m"
@@ -69,7 +69,7 @@ resource "talos_machine_configuration_apply" "worker" {
   machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
   node                        = each.value.ip
 
-  config_patches = [
+  config_patches = compact([
     templatefile("${path.module}/patches/worker.yaml.tpl", {
       installer_image = local.talos_installer_image
       node_subnet     = var.node_subnet
@@ -78,7 +78,7 @@ resource "talos_machine_configuration_apply" "worker" {
       auth_key    = var.tailscale_auth_key
       node_subnet = var.node_subnet
     }) : ""
-  ]
+  ])
 
   timeouts = {
     create = "10m"

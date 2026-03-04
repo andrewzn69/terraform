@@ -1,13 +1,13 @@
-# outputs.tf - re-expose module outputs
+# outputs.tf - user-facing outputs
 
 output "kubeconfig" {
-  description = "Kubeconfig for connecting to the cluster"
-  value       = module.talos_cluster.kubeconfig
+  description = "Kubeconfig YAML for connecting to the cluster"
+  value       = module.talos_cluster.kubeconfig_raw
   sensitive   = true
 }
 
 output "talosconfig" {
-  description = "Talosconfig for connecting via talosctl"
+  description = "Talosconfig YAML for connecting via talosctl"
   value       = module.talos_cluster.talosconfig
   sensitive   = true
 }
