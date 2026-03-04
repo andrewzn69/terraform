@@ -8,107 +8,60 @@ module "vizima" {
   project_slug = "vizima"
 }
 
-# top-level folders
-resource "infisical_secret_folder" "infrastructure" {
-  project_id       = module.vizima.project_id
-  environment_slug = "prod"
-  folder_path      = "/"
-  name             = "infrastructure"
+locals {
+  folders = {
+    infrastructure = {
+      path = "/"
+      subfolders = {
+        cert-manager = {}
+        tailscale    = {}
+        tunnels      = {}
+      }
+    }
+    media = {
+      path = "/"
+      subfolders = {
+        sonarr   = {}
+        radarr   = {}
+        prowlarr = {}
+      }
+    }
+    observability = {
+      path = "/"
+      subfolders = {
+        grafana = {}
+      }
+    }
+    bots = {
+      path = "/"
+      subfolders = {
+        vaculikovolevevarle = {}
+      }
+    }
+  }
+
+  # flatten structure for for_each
+  all_folders = merge(
+    { for k, v in local.folders : k => { path = v.path, parent = null } },
+    flatten([
+      for parent, config in local.folders : {
+        for subfolder in keys(config.subfolders) :
+        "${parent}/${subfolder}" => {
+          path   = "/${parent}"
+          parent = parent
+        }
+      }
+    ])...
+  )
 }
 
-resource "infisical_secret_folder" "media" {
+resource "infisical_secret_folder" "folders" {
+  for_each = local.all_folders
+
   project_id       = module.vizima.project_id
   environment_slug = "prod"
-  folder_path      = "/"
-  name             = "media"
-}
+  folder_path      = each.value.path
+  name             = split("/", each.key)[length(split("/", each.key)) - 1]
 
-resource "infisical_secret_folder" "observability" {
-  project_id       = module.vizima.project_id
-  environment_slug = "prod"
-  folder_path      = "/"
-  name             = "observability"
-}
-
-resource "infisical_secret_folder" "bots" {
-  project_id       = module.vizima.project_id
-  environment_slug = "prod"
-  folder_path      = "/"
-  name             = "bots"
-}
-
-# infrastructure subfolders
-resource "infisical_secret_folder" "cert_manager" {
-  project_id       = module.vizima.project_id
-  environment_slug = "prod"
-  folder_path      = "/infrastructure"
-  name             = "cert-manager"
-
-  depends_on = [infisical_secret_folder.infrastructure]
-}
-
-resource "infisical_secret_folder" "tailscale" {
-  project_id       = module.vizima.project_id
-  environment_slug = "prod"
-  folder_path      = "/infrastructure"
-  name             = "tailscale"
-
-  depends_on = [infisical_secret_folder.infrastructure]
-}
-
-resource "infisical_secret_folder" "tunnels" {
-  project_id       = module.vizima.project_id
-  environment_slug = "prod"
-  folder_path      = "/infrastructure"
-  name             = "tunnels"
-
-  depends_on = [infisical_secret_folder.infrastructure]
-}
-
-# media subfolders
-resource "infisical_secret_folder" "sonarr" {
-  project_id       = module.vizima.project_id
-  environment_slug = "prod"
-  folder_path      = "/media"
-  name             = "sonarr"
-
-  depends_on = [infisical_secret_folder.media]
-}
-
-resource "infisical_secret_folder" "radarr" {
-  project_id       = module.vizima.project_id
-  environment_slug = "prod"
-  folder_path      = "/media"
-  name             = "radarr"
-
-  depends_on = [infisical_secret_folder.media]
-}
-
-resource "infisical_secret_folder" "prowlarr" {
-  project_id       = module.vizima.project_id
-  environment_slug = "prod"
-  folder_path      = "/media"
-  name             = "prowlarr"
-
-  depends_on = [infisical_secret_folder.media]
-}
-
-# observability subfolders
-resource "infisical_secret_folder" "grafana" {
-  project_id       = module.vizima.project_id
-  environment_slug = "prod"
-  folder_path      = "/observability"
-  name             = "grafana"
-
-  depends_on = [infisical_secret_folder.observability]
-}
-
-# bots subfolders
-resource "infisical_secret_folder" "vaculikovolevevarle" {
-  project_id       = module.vizima.project_id
-  environment_slug = "prod"
-  folder_path      = "/bots"
-  name             = "vaculikovolevevarle"
-
-  depends_on = [infisical_secret_folder.bots]
+  depends_on = each.value.parent != null ? [infisical_secret_folder.folders[each.value.parent]] : []
 }
