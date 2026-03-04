@@ -13,11 +13,11 @@ locals {
 }
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     host                   = local.cluster_host
     cluster_ca_certificate = local.cluster_ca
 
-    exec {
+    exec = {
       api_version = "client.authentication.k8s.io/v1beta1"
       command     = "oci"
       args = [
