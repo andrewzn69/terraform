@@ -8,7 +8,9 @@ bash /var/run/oke-init.sh
 yum install -y nfs-utils
 
 # install and start tailscale
-curl -fsSL https://tailscale.com/install.sh | sh
+curl -fsSL https://pkgs.tailscale.com/stable/oracle/9/tailscale.repo -o /etc/yum.repos.d/tailscale.repo
+yum install -y tailscale
+systemctl enable --now tailscaled
 tailscale up \
   --authkey=${tailscale_auth_key} \
   --advertise-routes=${pods_cidr},${services_cidr} \
