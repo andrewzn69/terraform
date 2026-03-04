@@ -10,6 +10,7 @@ resource "tfe_workspace" "homelab_talos_prod" {
   organization      = "zemn"
   working_directory = "homelab-talos-proxmox/envs/prod"
   trigger_prefixes  = ["homelab-talos-proxmox/"]
+  auto_apply        = true
 
   vcs_repo {
     identifier                 = "andrewzn69/terraform"
