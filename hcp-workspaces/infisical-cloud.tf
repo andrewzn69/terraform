@@ -1,3 +1,5 @@
+# infisical-cloud.tf - workspace and variables for infisical secret management
+
 resource "tfe_workspace" "infisical_cloud" {
   name              = "infisical-cloud"
   organization      = "zemn"

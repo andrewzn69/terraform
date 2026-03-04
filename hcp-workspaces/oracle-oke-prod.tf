@@ -1,3 +1,5 @@
+# oracle-oke-prod.tf - workspace and variables for oracle oke cluster
+
 resource "tfe_workspace" "oracle_oke_prod" {
   name              = "oracle-oke-prod"
   organization      = "zemn"
