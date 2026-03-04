@@ -1,9 +1,20 @@
 # outputs.tf - values exposed by the talos-cluster module
 
-output "kubeconfig" {
-  description = "Kubeconfig for connecting to the cluster"
+output "kubeconfig_raw" {
+  description = "Raw kubeconfig for connecting to the cluster"
   value       = talos_cluster_kubeconfig.this[0].kubeconfig_raw
   sensitive   = true
+}
+
+output "kubeconfig" {
+  description = "Structured kubeconfig for provider configuration"
+  value = {
+    host                   = talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.host
+    client_certificate     = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.client_certificate)
+    client_key             = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.client_key)
+    cluster_ca_certificate = base64decode(talos_cluster_kubeconfig.this[0].kubernetes_client_configuration.ca_certificate)
+  }
+  sensitive = true
 }
 
 output "talosconfig" {

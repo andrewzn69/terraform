@@ -15,16 +15,6 @@ resource "helm_release" "argocd" {
   depends_on = [helm_release.cilium]
 }
 
-# read argocd initial admin password
-data "kubernetes_secret_v1" "argocd_initial_password" {
-  metadata {
-    name      = "argocd-initial-admin-secret"
-    namespace = "argocd"
-  }
-
-  depends_on = [helm_release.argocd]
-}
-
 # add kubernetes repo with gh app auth
 resource "argocd_repository" "kubernetes" {
   repo                      = "https://github.com/andrewzn69/kubernetes"
