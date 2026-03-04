@@ -9,7 +9,7 @@ resource "helm_release" "cilium" {
   wait_for_jobs    = true
   timeout          = 600
 
-  values = [file("${path.module}/values/cilium.yaml")]
+  values = [file("${path.root}/values/cilium.yaml")]
 
   set = [
     {
