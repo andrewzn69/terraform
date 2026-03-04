@@ -1,6 +1,6 @@
-# shared credentials variable set
-resource "tfe_variable_set" "shared_credentials" {
-  name         = "shared-credentials"
+# shared config variable set
+resource "tfe_variable_set" "shared_config" {
+  name         = "shared-config"
   organization = "zemn"
 }
 
@@ -9,7 +9,7 @@ resource "tfe_variable" "tailscale_auth_key" {
   value           = ""
   category        = "terraform"
   sensitive       = true
-  variable_set_id = tfe_variable_set.shared_credentials.id
+  variable_set_id = tfe_variable_set.shared_config.id
 
   lifecycle {
     ignore_changes = [value]
@@ -20,22 +20,22 @@ resource "tfe_variable" "talos_version" {
   key             = "talos_version"
   value           = "v1.12.3"
   category        = "terraform"
-  variable_set_id = tfe_variable_set.shared_credentials.id
+  variable_set_id = tfe_variable_set.shared_config.id
 }
 
 resource "tfe_variable" "cilium_version" {
   key             = "cilium_version"
   value           = "1.19.1"
   category        = "terraform"
-  variable_set_id = tfe_variable_set.shared_credentials.id
+  variable_set_id = tfe_variable_set.shared_config.id
 }
 
 resource "tfe_workspace_variable_set" "homelab_talos_prod" {
   workspace_id    = tfe_workspace.homelab_talos_prod.id
-  variable_set_id = tfe_variable_set.shared_credentials.id
+  variable_set_id = tfe_variable_set.shared_config.id
 }
 
 resource "tfe_workspace_variable_set" "oracle_oke_prod" {
   workspace_id    = tfe_workspace.oracle_oke_prod.id
-  variable_set_id = tfe_variable_set.shared_credentials.id
+  variable_set_id = tfe_variable_set.shared_config.id
 }
