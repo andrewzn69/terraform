@@ -3,6 +3,7 @@ resource "tfe_workspace" "oracle_oke_prod" {
   organization      = "zemn"
   working_directory = "oracle-oke/envs/prod"
   trigger_prefixes  = ["oracle-oke/"]
+  auto_apply        = true
 
   vcs_repo {
     identifier                 = "andrewzn69/terraform"
