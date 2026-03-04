@@ -27,6 +27,7 @@ module "oke" {
   pods_cidr     = var.pods_cidr
   services_cidr = var.services_cidr
 
+  cilium_version     = var.cilium_version
   tailscale_auth_key = var.tailscale_auth_key
   ssh_public_key     = var.ssh_public_key
 }

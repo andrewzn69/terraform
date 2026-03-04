@@ -9,18 +9,18 @@ resource "helm_release" "cilium" {
   wait_for_jobs    = true
   timeout          = 600
 
-  values = [file("${path.root}/values/cilium.yaml")]
+  values = [file("${path.module}/values/cilium.yaml")]
 
   set = [
     {
       name  = "k8sServiceHost"
-      value = split(":", module.oke.cluster_endpoint)[0]
+      value = split(":", oci_containerengine_cluster.main.endpoints[0].kubernetes)[0]
     },
     {
       name  = "k8sServicePort"
-      value = split(":", module.oke.cluster_endpoint)[1]
+      value = split(":", oci_containerengine_cluster.main.endpoints[0].kubernetes)[1]
     }
   ]
 
-  depends_on = [module.oke]
+  depends_on = [oci_containerengine_node_pool.workers]
 }

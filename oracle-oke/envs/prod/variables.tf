@@ -114,13 +114,6 @@ variable "services_cidr" {
   default     = "10.96.0.0/16"
 }
 
-# --- cilium ---
-
-variable "cilium_version" {
-  description = "Cilium Helm chart version"
-  type        = string
-}
-
 # --- tailscale ---
 
 variable "tailscale_auth_key" {

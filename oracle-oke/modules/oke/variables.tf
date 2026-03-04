@@ -90,3 +90,10 @@ variable "ssh_public_key" {
   type        = string
   default     = null
 }
+
+# --- cilium ---
+
+variable "cilium_version" {
+  description = "Cilium Helm chart version"
+  type        = string
+}
