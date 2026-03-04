@@ -14,14 +14,15 @@ resource "helm_release" "cilium" {
   values = [file("${path.module}/values/cilium.yaml")]
 
   # split cluster endpoint url into host and port for cilium config
+  # format: https://host:port -> extract host and port
   set = [
     {
       name  = "k8sServiceHost"
-      value = split(":", oci_containerengine_cluster.main.endpoints[0].kubernetes)[0]
+      value = split(":", replace(oci_containerengine_cluster.main.endpoints[0].public_endpoint, "https://", ""))[0]
     },
     {
       name  = "k8sServicePort"
-      value = split(":", oci_containerengine_cluster.main.endpoints[0].kubernetes)[1]
+      value = split(":", replace(oci_containerengine_cluster.main.endpoints[0].public_endpoint, "https://", ""))[1]
     }
   ]
 
