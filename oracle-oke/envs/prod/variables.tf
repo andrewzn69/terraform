@@ -39,18 +39,33 @@ variable "vcn_cidr_block" {
   description = "CIDR block for the VCN"
   type        = string
   default     = "10.0.0.0/16"
+
+  validation {
+    condition     = can(cidrhost(var.vcn_cidr_block, 0))
+    error_message = "vcn_cidr_block must be a valid CIDR notation"
+  }
 }
 
 variable "endpoint_subnet_cidr_block" {
   description = "CIDR block for the cluster endpoint and LB subnet"
   type        = string
   default     = "10.0.0.0/24"
+
+  validation {
+    condition     = can(cidrhost(var.endpoint_subnet_cidr_block, 0))
+    error_message = "endpoint_subnet_cidr_block must be a valid CIDR notation"
+  }
 }
 
 variable "nodes_subnet_cidr_block" {
   description = "CIDR block for the worker nodes subnet"
   type        = string
   default     = "10.0.1.0/24"
+
+  validation {
+    condition     = can(cidrhost(var.nodes_subnet_cidr_block, 0))
+    error_message = "nodes_subnet_cidr_block must be a valid CIDR notation"
+  }
 }
 
 # --- cluster ---
@@ -64,6 +79,11 @@ variable "cluster_name" {
 variable "kubernetes_version" {
   description = "Kubernetes version"
   type        = string
+
+  validation {
+    condition     = can(regex("^v[0-9]+\\.[0-9]+\\.[0-9]+$", var.kubernetes_version))
+    error_message = "kubernetes_version must be in format vX.Y.Z (e.g., v1.34.2)"
+  }
 }
 
 # --- node pool ---
@@ -72,6 +92,11 @@ variable "node_count" {
   description = "Number of worker nodes"
   type        = number
   default     = 2
+
+  validation {
+    condition     = var.node_count > 0
+    error_message = "node_count must be at least 1"
+  }
 }
 
 variable "node_ocpus" {
@@ -106,12 +131,22 @@ variable "pods_cidr" {
   description = "CIDR for pod networking"
   type        = string
   default     = "10.244.0.0/16"
+
+  validation {
+    condition     = can(cidrhost(var.pods_cidr, 0))
+    error_message = "pods_cidr must be a valid CIDR notation"
+  }
 }
 
 variable "services_cidr" {
   description = "CIDR for service networking"
   type        = string
   default     = "10.96.0.0/16"
+
+  validation {
+    condition     = can(cidrhost(var.services_cidr, 0))
+    error_message = "services_cidr must be a valid CIDR notation"
+  }
 }
 
 # --- tailscale ---
