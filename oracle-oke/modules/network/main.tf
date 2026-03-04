@@ -50,16 +50,6 @@ resource "oci_core_security_list" "main" {
     protocol  = "all"
     stateless = false
   }
-
-  ingress_security_rules {
-    source    = "0.0.0.0/0"
-    protocol  = "6"
-    stateless = false
-    tcp_options {
-      min = 30000
-      max = 32767
-    }
-  }
 }
 
 resource "oci_core_subnet" "endpoint" {
