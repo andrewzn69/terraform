@@ -64,6 +64,4 @@ resource "infisical_secret_folder" "folders" {
   environment_slug = "prod"
   folder_path      = each.value.path
   name             = split("/", each.key)[length(split("/", each.key)) - 1]
-
-  depends_on = each.value.parent != null ? [infisical_secret_folder.folders[each.value.parent]] : []
 }
