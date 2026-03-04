@@ -32,6 +32,11 @@ variable "gateway_ip" {
 variable "node_subnet" {
   description = "Subnet CIDR for Talos nodes"
   type        = string
+
+  validation {
+    condition     = can(cidrhost(var.node_subnet, 0))
+    error_message = "node_subnet must be a valid CIDR notation"
+  }
 }
 
 variable "ip_range_start" {
@@ -44,6 +49,11 @@ variable "ip_range_start" {
 variable "number_of_vms" {
   description = "Total number of Talos VMs (control plane + workers)"
   type        = number
+
+  validation {
+    condition     = var.number_of_vms > 0
+    error_message = "number_of_vms must be at least 1"
+  }
 }
 
 variable "control_plane_vm_count" {
