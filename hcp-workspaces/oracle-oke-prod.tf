@@ -13,7 +13,8 @@ resource "tfe_workspace" "oracle_oke_prod" {
 
 resource "tfe_workspace_settings" "oracle_oke_prod" {
   workspace_id   = tfe_workspace.oracle_oke_prod.id
-  execution_mode = "remote"
+  execution_mode = "agent"
+  agent_pool_id  = tfe_agent_pool.homelab.id
 }
 
 # --- oci auth ---
