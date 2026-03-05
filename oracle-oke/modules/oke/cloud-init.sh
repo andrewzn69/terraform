@@ -31,13 +31,3 @@ if ! tailscale status &>/dev/null; then
     --accept-routes \
     --accept-dns=false
 fi
-
-# format and mount block volume for persistent storage
-if ! blkid /dev/oracleoci/oraclevdb &>/dev/null; then
-  mkfs.ext4 /dev/oracleoci/oraclevdb
-fi
-mkdir -p /mnt/data
-if ! mountpoint -q /mnt/data; then
-  mount /dev/oracleoci/oraclevdb /mnt/data
-  echo "/dev/oracleoci/oraclevdb /mnt/data ext4 defaults,_netdev,nofail 0 2" >> /etc/fstab
-fi
