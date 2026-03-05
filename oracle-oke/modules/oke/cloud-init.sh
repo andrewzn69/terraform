@@ -11,6 +11,9 @@ if [ ! -f /var/run/oke-init.done ]; then
   touch /var/run/oke-init.done
 fi
 
+# extend root filesystem to fill boot volume (disabled by default since oke image 1130)
+/usr/libexec/oci-growfs -y
+
 # install nfs utils
 if ! rpm -q nfs-utils &>/dev/null; then
   yum install -y nfs-utils
