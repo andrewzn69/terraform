@@ -22,12 +22,11 @@ module "oke" {
   endpoint_subnet_id = module.network.endpoint_subnet_id
   nodes_subnet_id    = module.network.nodes_subnet_id
 
-  kubernetes_version        = var.kubernetes_version
-  node_count                = var.node_count
-  node_ocpus                = var.node_ocpus
-  node_memory_gb            = var.node_memory_gb
-  node_boot_volume_size_gb  = var.node_boot_volume_size_gb
-  node_block_volume_size_gb = var.node_block_volume_size_gb
+  kubernetes_version       = var.kubernetes_version
+  node_count               = var.node_count
+  node_ocpus               = var.node_ocpus
+  node_memory_gb           = var.node_memory_gb
+  node_boot_volume_size_gb = var.node_boot_volume_size_gb
 
   pods_cidr     = var.pods_cidr
   services_cidr = var.services_cidr

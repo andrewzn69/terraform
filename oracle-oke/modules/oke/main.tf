@@ -105,32 +105,6 @@ resource "oci_containerengine_node_pool" "workers" {
   ssh_public_key = var.ssh_public_key
 }
 
-data "oci_containerengine_node_pool" "workers" {
-  node_pool_id = oci_containerengine_node_pool.workers.id
-}
-
-resource "oci_core_volume" "worker_block" {
-  count               = var.node_count
-  compartment_id      = var.compartment_id
-  availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
-  display_name        = "${var.cluster_name}-worker-${count.index}-block"
-  size_in_gbs         = var.node_block_volume_size_gb
-
-  freeform_tags = {
-    environment = "prod"
-    managed-by  = "terraform"
-    cluster     = var.cluster_name
-  }
-}
-
-resource "oci_core_volume_attachment" "worker_block" {
-  count           = var.node_count
-  attachment_type = "paravirtualized"
-  instance_id     = data.oci_containerengine_node_pool.workers.nodes[count.index].id
-  volume_id       = oci_core_volume.worker_block[count.index].id
-  display_name    = "${var.cluster_name}-worker-${count.index}-block-attach"
-}
-
 data "oci_containerengine_cluster_kube_config" "main" {
   cluster_id = oci_containerengine_cluster.main.id
   endpoint   = "PUBLIC_ENDPOINT"

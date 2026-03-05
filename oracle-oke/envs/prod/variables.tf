@@ -121,12 +121,6 @@ variable "node_boot_volume_size_gb" {
   default     = 50
 }
 
-variable "node_block_volume_size_gb" {
-  description = "Block volume size in GB per worker node"
-  type        = number
-  default     = 50
-}
-
 # --- networking ---
 
 variable "pods_cidr" {

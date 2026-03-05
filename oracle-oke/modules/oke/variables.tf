@@ -60,11 +60,6 @@ variable "node_boot_volume_size_gb" {
   type        = number
 }
 
-variable "node_block_volume_size_gb" {
-  description = "Block volume size in GB per worker node"
-  type        = number
-}
-
 # --- networking ---
 
 variable "pods_cidr" {
