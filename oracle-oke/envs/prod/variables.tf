@@ -118,7 +118,7 @@ variable "node_memory_gb" {
 variable "node_boot_volume_size_gb" {
   description = "Boot volume size in GB per worker node"
   type        = number
-  default     = 50
+  default     = 100
 }
 
 # --- networking ---
