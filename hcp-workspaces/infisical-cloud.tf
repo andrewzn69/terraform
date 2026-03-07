@@ -15,6 +15,7 @@ resource "tfe_workspace" "infisical_cloud" {
 resource "tfe_workspace_settings" "infisical_cloud" {
   workspace_id   = tfe_workspace.infisical_cloud.id
   execution_mode = "remote"
+  auto_apply     = true
 }
 
 resource "tfe_variable" "infisical_client_id" {
