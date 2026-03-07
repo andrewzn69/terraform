@@ -54,7 +54,7 @@ locals {
   # flatten structure for for_each
   all_folders = merge(
     { for k, v in local.folders : k => { path = v.path, parent = null } },
-    flatten([
+    merge([
       for parent, config in local.folders : {
         for subfolder in keys(config.subfolders) :
         "${parent}/${subfolder}" => {
@@ -62,7 +62,7 @@ locals {
           parent = parent
         }
       }
-    ])...
+    ]...)
   )
 }
 
