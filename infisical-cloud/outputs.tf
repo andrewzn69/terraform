@@ -24,3 +24,30 @@ output "vizima_client_secret" {
   value       = module.vizima.client_secret
   sensitive   = true
 }
+
+output "novigrad_project_id" {
+  description = "Novigrad project ID"
+  value       = module.novigrad.project_id
+}
+
+output "novigrad_project_slug" {
+  description = "Novigrad project slug"
+  value       = module.novigrad.project_slug
+}
+
+output "novigrad_identity_id" {
+  description = "Novigrad cluster identity ID"
+  value       = module.novigrad.identity_id
+}
+
+output "novigrad_client_id" {
+  description = "Novigrad cluster client ID for Kubernetes operator"
+  value       = module.novigrad.client_id
+  sensitive   = true
+}
+
+output "novigrad_client_secret" {
+  description = "Novigrad cluster client secret for Kubernetes operator"
+  value       = module.novigrad.client_secret
+  sensitive   = true
+}
