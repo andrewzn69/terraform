@@ -26,7 +26,7 @@ locals {
       subfolders = {
         cert-manager = {}
         tailscale    = {}
-        tunnels      = {}
+        cloudflare   = {}
       }
     }
     media = {
