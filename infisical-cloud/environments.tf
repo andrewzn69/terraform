@@ -10,6 +10,15 @@ module "vizima" {
   project_slug = "vizima"
 }
 
+module "novigrad" {
+  source = "./modules/cluster-environment"
+
+  org_id       = var.org_id
+  cluster_name = "novigrad"
+  project_name = "Novigrad"
+  project_slug = "novigrad"
+}
+
 locals {
   folders = {
     infrastructure = {
@@ -61,6 +70,15 @@ resource "infisical_secret_folder" "folders" {
   for_each = local.all_folders
 
   project_id       = module.vizima.project_id
+  environment_slug = "prod"
+  folder_path      = each.value.path
+  name             = split("/", each.key)[length(split("/", each.key)) - 1]
+}
+
+resource "infisical_secret_folder" "novigrad_folders" {
+  for_each = local.all_folders
+
+  project_id       = module.novigrad.project_id
   environment_slug = "prod"
   folder_path      = each.value.path
   name             = split("/", each.key)[length(split("/", each.key)) - 1]
