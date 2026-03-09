@@ -22,4 +22,4 @@ name: longhorn
 provisioning:
   diskSelector:
     match: disk.size >= 100u * GiB && !system_disk
-  grow: false
+  maxSize: 100GiB
