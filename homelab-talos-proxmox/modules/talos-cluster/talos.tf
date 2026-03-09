@@ -23,6 +23,8 @@ data "talos_machine_configuration" "control_plane" {
 }
 
 data "talos_machine_configuration" "worker" {
+  for_each = { for vm in local.worker_vms : vm.name => vm }
+
   talos_version    = var.talos_version
   cluster_name     = var.cluster_name
   cluster_endpoint = var.cluster_endpoint
@@ -30,6 +32,33 @@ data "talos_machine_configuration" "worker" {
   machine_secrets  = talos_machine_secrets.this.machine_secrets
   docs             = false
   examples         = false
+
+  config_patches = compact([
+    templatefile("${path.module}/patches/worker.yaml.tpl", {
+      installer_image = local.talos_installer_image
+      node_subnet     = var.node_subnet
+      node_ip         = each.value.ip
+      node_prefix     = split("/", var.node_subnet)[1]
+      gateway_ip      = var.gateway_ip
+    }),
+    var.tailscale_auth_key != "" ? templatefile("${path.module}/patches/tailscale.yaml.tpl", {
+      auth_key    = var.tailscale_auth_key
+      node_subnet = var.node_subnet
+    }) : "",
+  ])
+}
+
+resource "proxmox_virtual_environment_file" "worker_machine_config" {
+  for_each = { for vm in local.worker_vms : vm.name => vm }
+
+  node_name    = var.proxmox_host
+  content_type = "snippets"
+  datastore_id = "local"
+
+  source_raw {
+    data      = data.talos_machine_configuration.worker[each.key].machine_configuration
+    file_name = "${each.key}-machine-config.yaml"
+  }
 }
 
 data "talos_client_configuration" "this" {
@@ -66,19 +95,8 @@ resource "talos_machine_configuration_apply" "control_plane" {
 resource "talos_machine_configuration_apply" "worker" {
   for_each                    = { for vm in local.worker_vms : vm.name => vm }
   client_configuration        = talos_machine_secrets.this.client_configuration
-  machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
+  machine_configuration_input = data.talos_machine_configuration.worker[each.key].machine_configuration
   node                        = each.value.ip
-
-  config_patches = compact([
-    templatefile("${path.module}/patches/worker.yaml.tpl", {
-      installer_image = local.talos_installer_image
-      node_subnet     = var.node_subnet
-    }),
-    var.tailscale_auth_key != "" ? templatefile("${path.module}/patches/tailscale.yaml.tpl", {
-      auth_key    = var.tailscale_auth_key
-      node_subnet = var.node_subnet
-    }) : ""
-  ])
 
   timeouts = {
     create = "10m"
