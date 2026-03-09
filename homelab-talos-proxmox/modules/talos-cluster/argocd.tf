@@ -15,13 +15,12 @@ resource "helm_release" "argocd" {
   depends_on = [helm_release.cilium]
 }
 
-# add kubernetes repo with gh app auth
-resource "argocd_repository" "kubernetes" {
-  repo                      = "https://github.com/andrewzn69/kubernetes"
-  type                      = "git"
-  githubapp_id              = var.github_app_id
-  githubapp_installation_id = var.github_app_installation_id
-  githubapp_private_key     = var.github_app_private_key
-
-  depends_on = [helm_release.argocd]
-}
+# resource "argocd_repository" "kubernetes" {
+#   repo                      = "https://github.com/andrewzn69/kubernetes"
+#   type                      = "git"
+#   githubapp_id              = var.github_app_id
+#   githubapp_installation_id = var.github_app_installation_id
+#   githubapp_private_key     = var.github_app_private_key
+#
+#   depends_on = [helm_release.argocd]
+# }

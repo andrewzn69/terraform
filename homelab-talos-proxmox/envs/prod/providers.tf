@@ -16,13 +16,12 @@ locals {
   }, null)
 }
 
-# argocd initial admin password for provider auth
-data "kubernetes_secret_v1" "argocd_initial_password" {
-  metadata {
-    name      = "argocd-initial-admin-secret"
-    namespace = "argocd"
-  }
-}
+# data "kubernetes_secret_v1" "argocd_initial_password" {
+#   metadata {
+#     name      = "argocd-initial-admin-secret"
+#     namespace = "argocd"
+#   }
+# }
 
 provider "helm" {
   kubernetes = local.kube_config != null ? {
@@ -40,16 +39,16 @@ provider "kubernetes" {
   cluster_ca_certificate = try(local.kube_config.cluster_ca_certificate, null)
 }
 
-provider "argocd" {
-  port_forward_with_namespace = "argocd"
-  plain_text                  = true
-  username                    = "admin"
-  password                    = try(data.kubernetes_secret_v1.argocd_initial_password.data["password"], null)
-
-  kubernetes {
-    host                   = try(local.kube_config.host, null)
-    client_certificate     = try(local.kube_config.client_certificate, null)
-    client_key             = try(local.kube_config.client_key, null)
-    cluster_ca_certificate = try(local.kube_config.cluster_ca_certificate, null)
-  }
-}
+# provider "argocd" {
+#   port_forward_with_namespace = "argocd"
+#   plain_text                  = true
+#   username                    = "admin"
+#   password                    = try(data.kubernetes_secret_v1.argocd_initial_password.data["password"], null)
+#
+#   kubernetes {
+#     host                   = try(local.kube_config.host, null)
+#     client_certificate     = try(local.kube_config.client_certificate, null)
+#     client_key             = try(local.kube_config.client_key, null)
+#     cluster_ca_certificate = try(local.kube_config.cluster_ca_certificate, null)
+#   }
+# }
