@@ -23,5 +23,3 @@ provisioning:
   diskSelector:
     match: disk.size >= 100u * GiB && !system_disk
   grow: false
-mount:
-  path: /var/mnt/longhorn
