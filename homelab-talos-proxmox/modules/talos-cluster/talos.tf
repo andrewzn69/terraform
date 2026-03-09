@@ -85,6 +85,12 @@ resource "talos_machine_configuration_apply" "worker" {
     update = "10m"
   }
 
+  lifecycle {
+    replace_triggered_by = [
+      proxmox_virtual_environment_vm.worker_vm
+    ]
+  }
+
   depends_on = [proxmox_virtual_environment_vm.worker_vm]
 }
 
