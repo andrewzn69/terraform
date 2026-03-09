@@ -46,8 +46,13 @@ resource "proxmox_virtual_environment_vm" "worker_vm" {
   }
 
   initialization {
-    datastore_id      = var.cloudinit_storage
-    user_data_file_id = proxmox_virtual_environment_file.worker_machine_config[each.key].id
+    datastore_id = var.cloudinit_storage
+    ip_config {
+      ipv4 {
+        address = "${each.value.ip}/${split("/", var.node_subnet)[1]}"
+        gateway = var.gateway_ip
+      }
+    }
   }
 
   lifecycle {
@@ -56,7 +61,6 @@ resource "proxmox_virtual_environment_vm" "worker_vm" {
       boot_order,
       network_device,
       description,
-      initialization,
     ]
   }
 }
