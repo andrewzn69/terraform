@@ -19,4 +19,8 @@ resource "helm_release" "cilium" {
   values = [file("${path.module}/values/cilium.yaml")]
 
   depends_on = [data.kubernetes_nodes.wait]
+
+  lifecycle {
+    ignore_changes = all
+  }
 }
