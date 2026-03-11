@@ -32,10 +32,10 @@ resource "oci_core_route_table" "main" {
   }
 }
 
-resource "oci_core_security_list" "main" {
+resource "oci_core_security_list" "endpoint" {
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.main.id
-  display_name   = "${var.cluster_name}-sl"
+  display_name   = "${var.cluster_name}-endpoint-sl"
 
   egress_security_rules {
     destination = "0.0.0.0/0"
@@ -52,6 +52,25 @@ resource "oci_core_security_list" "main" {
       min = 6443
       max = 6443
     }
+  }
+
+  # all infra-cluster traffic
+  ingress_security_rules {
+    source    = var.vcn_cidr_block
+    protocol  = "all"
+    stateless = false
+  }
+}
+
+resource "oci_core_security_list" "nodes" {
+  compartment_id = var.compartment_id
+  vcn_id         = oci_core_vcn.main.id
+  display_name   = "${var.cluster_name}-nodes-sl"
+
+  egress_security_rules {
+    destination = "0.0.0.0/0"
+    protocol    = "all"
+    stateless   = false
   }
 
   # all infra-cluster traffic
@@ -90,7 +109,7 @@ resource "oci_core_subnet" "endpoint" {
   display_name      = "${var.cluster_name}-endpoint-subnet"
   cidr_block        = var.endpoint_subnet_cidr_block
   route_table_id    = oci_core_route_table.main.id
-  security_list_ids = [oci_core_security_list.main.id]
+  security_list_ids = [oci_core_security_list.endpoint.id]
   dns_label         = "endpoint"
 
   freeform_tags = {
@@ -106,7 +125,7 @@ resource "oci_core_subnet" "nodes" {
   display_name      = "${var.cluster_name}-nodes-subnet"
   cidr_block        = var.nodes_subnet_cidr_block
   route_table_id    = oci_core_route_table.main.id
-  security_list_ids = [oci_core_security_list.main.id]
+  security_list_ids = [oci_core_security_list.nodes.id]
   dns_label         = "nodes"
 
   freeform_tags = {
