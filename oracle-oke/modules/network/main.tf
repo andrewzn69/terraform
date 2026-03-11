@@ -43,6 +43,7 @@ resource "oci_core_security_list" "main" {
     stateless   = false
   }
 
+  # kubernetes api server
   ingress_security_rules {
     source    = "0.0.0.0/0"
     protocol  = "6"
@@ -53,10 +54,33 @@ resource "oci_core_security_list" "main" {
     }
   }
 
+  # all infra-cluster traffic
   ingress_security_rules {
     source    = var.vcn_cidr_block
     protocol  = "all"
     stateless = false
+  }
+
+  # teamspeak voice traffic (UDP)
+  ingress_security_rules {
+    source    = "0.0.0.0/0"
+    protocol  = "17"
+    stateless = false
+    udp_options {
+      min = 9987
+      max = 9987
+    }
+  }
+
+  # teamspeak file transfer (TCP)
+  ingress_security_rules {
+    source    = "0.0.0.0/0"
+    protocol  = "6"
+    stateless = false
+    tcp_options {
+      min = 30033
+      max = 30033
+    }
   }
 }
 
