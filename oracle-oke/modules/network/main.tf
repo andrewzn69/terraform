@@ -60,6 +60,28 @@ resource "oci_core_security_list" "endpoint" {
     protocol  = "all"
     stateless = false
   }
+
+  # teamspeak voice traffic (UDP)
+  ingress_security_rules {
+    source    = "0.0.0.0/0"
+    protocol  = "17"
+    stateless = false
+    udp_options {
+      min = 9987
+      max = 9987
+    }
+  }
+
+  # teamspeak file transfer (TCP)
+  ingress_security_rules {
+    source    = "0.0.0.0/0"
+    protocol  = "6"
+    stateless = false
+    tcp_options {
+      min = 30033
+      max = 30033
+    }
+  }
 }
 
 resource "oci_core_security_list" "nodes" {
