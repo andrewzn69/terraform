@@ -18,7 +18,6 @@ provider "proxmox" {
 module "k8s_cluster" {
   source = "../../"
 
-
   iso_url              = var.iso_url
   gateway_ip           = var.gateway_ip
   node_subnet          = var.node_subnet
