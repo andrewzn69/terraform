@@ -1,0 +1,97 @@
+proxmox_endpoint  = "https://10.0.0.50:8006"
+proxmox_api_token = "terraform@pam!homelab=a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+proxmox_insecure  = true
+
+iso_url     = "https://example.com/os.iso"
+gateway_ip  = "10.0.0.1"
+node_subnet = "10.0.0.0/24"
+
+control_plane_groups = [
+  {
+		name              = "controlplane-node1"
+		node_name         = "proxmox1"
+		count             = 3
+		vm_id_start       = 101
+		ip_range_start    = 10
+		cpu               = 2
+		memory            = 4096
+		disk_size         = 20
+		storage           = "local-lvm"
+		cloudinit_storage = "local"
+		bridge            = "vmbr0"
+	},
+  {
+		name              = "controlplane-node2"
+		node_name         = "proxmox2"
+		count             = 3
+		vm_id_start       = 104
+		ip_range_start    = 13
+		cpu               = 2
+		memory            = 4096
+		disk_size         = 20
+		storage           = "local-lvm"
+		cloudinit_storage = "local"
+		bridge            = "vmbr0"
+	},
+  {
+		name              = "controlplane-node3"
+		node_name         = "proxmox3"
+		count             = 3
+		vm_id_start       = 107
+		ip_range_start    = 16
+		cpu               = 2
+		memory            = 4096
+		disk_size         = 20
+		storage           = "local-lvm"
+		cloudinit_storage = "local"
+		bridge            = "vmbr0"
+	},
+]
+
+worker_groups = [
+  {
+		name              = "worker-node1"
+		node_name         = "proxmox1"
+		count             = 5
+		vm_id_start       = 201
+		ip_range_start    = 19
+		cpu               = 4
+		memory            = 8192
+		disk_size         = 30
+		storage           = "local-lvm"
+		cloudinit_storage = "local"
+		bridge            = "vmbr0"
+		data_disk_size    = 100
+		data_storage      = "local-lvm"
+	},
+  {
+		name              = "worker-node2"
+		node_name         = "proxmox2"
+		count             = 5
+		vm_id_start       = 206
+		ip_range_start    = 24
+		cpu               = 4
+		memory            = 8192
+		disk_size         = 30
+		storage           = "local-lvm"
+		cloudinit_storage = "local"
+		bridge            = "vmbr0"
+		data_disk_size    = 100
+		data_storage      = "local-lvm"
+	},
+  {
+		name              = "worker-node3"
+		node_name         = "proxmox3"
+		count             = 5
+		vm_id_start       = 211
+		ip_range_start    = 29
+		cpu               = 4
+		memory            = 8192
+		disk_size         = 30
+		storage           = "local-lvm"
+		cloudinit_storage = "local"
+		bridge            = "vmbr0"
+		data_disk_size    = 100
+		data_storage      = "local-lvm"
+	}
+]

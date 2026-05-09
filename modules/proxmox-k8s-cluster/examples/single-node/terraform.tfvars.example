@@ -1,0 +1,41 @@
+proxmox_endpoint  = "https://10.0.0.50:8006"
+proxmox_api_token = "terraform@pam!homelab=a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+proxmox_insecure  = true
+
+iso_url     = "https://example.com/os.iso"
+gateway_ip  = "10.0.0.1"
+node_subnet = "10.0.0.0/24"
+
+control_plane_groups = [
+  {
+		name              = "controlplane"
+		node_name         = "proxmox"
+		count             = 1
+		vm_id_start       = 101
+		ip_range_start    = 10
+		cpu               = 2
+		memory            = 4096
+		disk_size         = 20
+		storage           = "local-lvm"
+		cloudinit_storage = "local"
+		bridge            = "vmbr0"
+	}
+]
+
+worker_groups = [
+  {
+		name              = "worker"
+		node_name         = "proxmox"
+		count             = 2
+		vm_id_start       = 201
+		ip_range_start    = 11
+		cpu               = 2
+		memory            = 8192
+		disk_size         = 30
+		storage           = "local-lvm"
+		cloudinit_storage = "local"
+		bridge            = "vmbr0"
+		data_disk_size    = 100
+		data_storage      = "local-lvm"
+	}
+]
