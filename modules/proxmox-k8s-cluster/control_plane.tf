@@ -14,7 +14,7 @@ resource "proxmox_virtual_environment_vm" "control_plane" {
 
   cpu {
     cores = each.value.cpu
-    type  = "host"
+    type  = "host" # pass-through host cpu flags for best performance
   }
 
   memory {
@@ -28,6 +28,7 @@ resource "proxmox_virtual_environment_vm" "control_plane" {
     interface = "ide0"
   }
 
+  # os boot disk
   disk {
     datastore_id = each.value.storage
     interface    = "scsi0"
