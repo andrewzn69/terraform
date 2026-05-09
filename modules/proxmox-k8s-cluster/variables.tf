@@ -1,0 +1,52 @@
+# variables.tf
+
+variable "control_plane_groups" {
+  description = "Control plane node groups"
+  type = list(object({
+    name              = string # unique group name, used as vm name prefix
+    node_name         = string # proxmox node name where vms will be created
+    count             = number # number of control plane vms in this group
+    vm_id_start       = number # starting proxmox vm id, increments per vm
+    ip_range_start    = number # host offset in node_subnet for the first vm, increments per vm
+    cpu               = number # vcpu count for vm
+    memory            = number # ram per vm in MB
+    disk_size         = number # os boot disk size in GB
+    storage           = string # proxmox storage pool for the boot disk
+    cloudinit_storage = string # proxmox storage pool for the cloud-init drive
+    bridge            = string # proxmox network bridge for the vm nic
+  }))
+}
+
+variable "worker_groups" {
+  description = "Worker node groups"
+  type = list(object({
+    name              = string # unique group name, used as vm name prefix
+    node_name         = string # proxmox node name where vms will be created
+    count             = number # number of worker vms in this group
+    vm_id_start       = number # starting proxmox vm id, increments per vm
+    ip_range_start    = number # host offset in node_subnet for the first vm, increments per vm
+    cpu               = number # vcpu count per vm
+    memory            = number # ram per vm in MB
+    disk_size         = number # os boot disk size in GB
+    storage           = string # proxmox storage pool for the boot disk
+    cloudinit_storage = string # proxmox storage pool for the cloud-init drive
+    bridge            = string # proxmox network bridge for the vm nic
+    data_disk_size    = number # secondary data disk size in GB, used for persistent storage (e.g. CSI)
+    data_storage      = string # proxmox storage pool for the data disk
+  }))
+}
+
+variable "gateway_ip" {
+  description = "Gateway IP for VM network config"
+  type        = string
+}
+
+variable "node_subnet" {
+  description = "Subnet CIDR for node network config"
+  type        = string
+}
+
+variable "iso_url" {
+  description = "URL of the OS ISO to download to Proxmox nodes"
+  type        = string
+}
