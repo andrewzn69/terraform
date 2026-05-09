@@ -1,7 +1,7 @@
 # iso.tf
 # download the os iso to each unique proxmox node
 
-resource "proxmox_virtual_environment_download_file" "iso" {
+resource "proxmox_download_file" "iso" {
   for_each = toset(local.unique_nodes)
 
   node_name    = each.value

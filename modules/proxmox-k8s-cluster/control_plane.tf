@@ -24,7 +24,7 @@ resource "proxmox_virtual_environment_vm" "control_plane" {
   boot_order = ["scsi0", "ide0", "net0"]
 
   cdrom {
-    file_id   = proxmox_virtual_environment_download_file.iso[each.value.node_name].id
+    file_id   = proxmox_download_file.iso[each.value.node_name].id
     interface = "ide0"
   }
 
