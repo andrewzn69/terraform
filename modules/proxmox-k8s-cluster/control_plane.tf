@@ -3,10 +3,11 @@
 resource "proxmox_virtual_environment_vm" "control_plane" {
   for_each = { for vm in local.control_plane_vms : vm.name => vm }
 
-  name      = each.value.name
-  node_name = each.value.node_name
-  vm_id     = each.value.vmid
-  on_boot   = true
+  name            = each.value.name
+  node_name       = each.value.node_name
+  vm_id           = each.value.vmid
+  on_boot         = true
+  stop_on_destroy = true
 
   agent {
     enabled = true

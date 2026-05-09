@@ -3,10 +3,11 @@
 resource "proxmox_virtual_environment_vm" "worker" {
   for_each = { for vm in local.worker_vms : vm.name => vm }
 
-  name      = each.value.name
-  node_name = each.value.node_name
-  vm_id     = each.value.vmid
-  on_boot   = true
+  name            = each.value.name
+  node_name       = each.value.node_name
+  vm_id           = each.value.vmid
+  on_boot         = true
+  stop_on_destroy = true
 
   agent {
     enabled = true
