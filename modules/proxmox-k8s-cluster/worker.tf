@@ -1,0 +1,68 @@
+# worker.tf
+
+resource "proxmox_virtual_environment_vm" "worker" {
+  for_each = { for vm in local.worker_vms : vm.name => vm }
+
+  name      = each.value.name
+  node_name = each.value.node_name
+  vm_id     = each.value.vmid
+  on_boot   = true
+
+  agent {
+    enabled = true
+  }
+
+  cpu {
+    cores = each.value.cpu
+    type  = "host" # pass-through host cpu flags for best performance
+  }
+
+  memory {
+    dedicated = each.value.memory
+  }
+
+  boot_order = ["scsi0", "ide0", "net0"]
+
+  cdrom {
+    file_id   = proxmox_virtual_environment_download_file.iso[each.value.node_name].id
+    interface = "ide0"
+  }
+
+  # os boot disk
+  disk {
+    datastore_id = each.value.storage
+    interface    = "scsi0"
+    size         = each.value.disk_size
+  }
+
+  # secondary data disk for persistent storage (e.g. CSI)
+  disk {
+    datastore_id = each.value.data_storage
+    interface    = "scsi1"
+    size         = each.value.data_disk_size
+  }
+
+  network_device {
+    bridge = each.value.bridge
+    model  = "virtio"
+  }
+
+  initialization {
+    datastore_id = each.value.cloudinit_storage
+    ip_config {
+      ipv4 {
+        address = "${each.value.ip}/${split("/", var.node_subnet)[1]}"
+        gateway = var.gateway_ip
+      }
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      cdrom,
+      boot_order,
+      network_device,
+      description
+    ]
+  }
+}
