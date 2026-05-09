@@ -55,7 +55,7 @@ module "k8s_cluster" {
       memory            = 4096
       disk_size         = 20
       storage           = "local-lvm"
-      cloudinit_storage = "local"
+      cloudinit_storage = "local-lvm"
       bridge            = "vmbr0"
     }
   ]
@@ -71,7 +71,7 @@ module "k8s_cluster" {
       memory            = 8192
       disk_size         = 30
       storage           = "local-lvm"
-      cloudinit_storage = "local"
+      cloudinit_storage = "local-lvm"
       bridge            = "vmbr0"
       data_disk_size    = 100
       data_storage      = "local-lvm"
