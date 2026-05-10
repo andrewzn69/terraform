@@ -36,11 +36,14 @@ resource "proxmox_virtual_environment_vm" "worker" {
     size         = each.value.disk_size
   }
 
-  # secondary data disk for persistent storage (e.g. CSI)
-  disk {
-    datastore_id = each.value.data_storage
-    interface    = "scsi1"
-    size         = each.value.data_disk_size
+  # optional secondary data disk for persistent storage (e.g. CSI)
+  dynamic "disk" {
+    for_each = each.value.data_disk_size != null ? [1] : []
+    content {
+      datastore_id = each.value.data_storage
+      interface    = "scsi1"
+      size         = each.value.data_disk_size
+    }
   }
 
   network_device {
