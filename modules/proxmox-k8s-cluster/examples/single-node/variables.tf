@@ -20,6 +20,12 @@ variable "iso_url" {
   type        = string
 }
 
+variable "iso_datastore_id" {
+  description = "Proxmox datastore to download the ISO into"
+  type        = string
+  default     = "local"
+}
+
 variable "gateway_ip" {
   description = "Gateway IP for VM network config"
   type        = string

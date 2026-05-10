@@ -50,3 +50,9 @@ variable "iso_url" {
   description = "URL of the OS ISO to download to Proxmox nodes"
   type        = string
 }
+
+variable "iso_datastore_id" {
+  description = "Proxmox datastore to download the ISO into"
+  type        = string
+  default     = "local"
+}

@@ -2,7 +2,9 @@ proxmox_endpoint  = "https://10.0.0.50:8006"
 proxmox_api_token = "terraform@pam!homelab=a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 proxmox_insecure  = true
 
-iso_url     = "https://example.com/os.iso"
+iso_url          = "https://example.com/os.iso"
+iso_datastore_id = "local"
+
 gateway_ip  = "10.0.0.1"
 node_subnet = "10.0.0.0/24"
 

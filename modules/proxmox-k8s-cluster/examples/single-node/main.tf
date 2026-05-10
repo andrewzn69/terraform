@@ -19,6 +19,7 @@ module "k8s_cluster" {
   source = "../../"
 
   iso_url              = var.iso_url
+  iso_datastore_id     = var.iso_datastore_id
   gateway_ip           = var.gateway_ip
   node_subnet          = var.node_subnet
   control_plane_groups = var.control_plane_groups
