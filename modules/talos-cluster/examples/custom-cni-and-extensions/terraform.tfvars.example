@@ -1,0 +1,12 @@
+control_plane_ips = ["10.0.0.10"]
+worker_ips        = ["10.0.0.20"]
+talos_version     = "v1.13.0"
+cluster_name      = "my-cluster"
+cluster_endpoint  = "https://10.0.0.10:6443"
+node_subnet       = "10.0.0.0/24"
+
+schematic_extensions = [
+  "siderolabs/qemu-guest-agent",
+  "siderolabs/iscsi-tools",
+  "siderolabs/util-linux-tools",
+]
