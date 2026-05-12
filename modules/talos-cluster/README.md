@@ -30,7 +30,7 @@ terraform {
 provider "talos" {}
 
 module "talos_cluster" {
-  source = "github.com/andrewzn69/terraform/modules/talos-cluster"
+  source = "github.com/andrewzn69/terraform//modules/talos-cluster"
 
   control_plane_ips = ["<control-plane-ip>"]
   worker_ips        = ["<worker-ip>"]
