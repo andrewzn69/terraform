@@ -38,7 +38,7 @@ provider "proxmox" {
 }
 
 module "k8s_cluster" {
-  source = "github.com/andrewzn69/terraform/modules/proxmox/proxmox-k8s-cluster"
+  source = "github.com/andrewzn69/terraform//modules/proxmox/proxmox-k8s-cluster"
 
   iso_url          = "https://example.com/os.iso"
   iso_datastore_id = "local"
