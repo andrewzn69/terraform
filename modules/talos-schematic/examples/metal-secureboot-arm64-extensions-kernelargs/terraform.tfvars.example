@@ -1,0 +1,5 @@
+talos_version = "v1.13.1"
+schematic_extensions = [
+  "siderolabs/iscsi-tools",
+]
+extra_kernel_args = ["console=ttyS0,115200"]
