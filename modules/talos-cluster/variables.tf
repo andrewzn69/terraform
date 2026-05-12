@@ -36,10 +36,9 @@ variable "install_disk" {
   default     = "/dev/sda"
 }
 
-variable "schematic_extensions" {
-  description = "List of Talos image factory official extensions to include in the schematic"
-  type        = list(string)
-  default     = []
+variable "installer_image" {
+  description = "Talos installer OCI image reference"
+  type        = string
 }
 
 variable "extra_control_plane_patches" {

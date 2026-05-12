@@ -20,8 +20,7 @@ module "talos_cluster" {
   cluster_name      = var.cluster_name
   cluster_endpoint  = var.cluster_endpoint
   node_subnet       = var.node_subnet
-
-  schematic_extensions = var.schematic_extensions
+  installer_image   = var.installer_image
 
   extra_control_plane_patches = [
     yamlencode({

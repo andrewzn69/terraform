@@ -27,3 +27,8 @@ variable "node_subnet" {
   description = "Subnet CIDR used for kubelet nodeIP validation"
   type        = string
 }
+
+variable "installer_image" {
+  description = "Talos installer OCI image reference"
+  type        = string
+}

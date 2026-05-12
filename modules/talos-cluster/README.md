@@ -3,7 +3,6 @@
 Terraform module for bootstrapping a Talos Linux Kubernetes cluster from existing nodes.
 
 This module can:
-- generate a Talos image schematic with optional extensions
 - generate and apply machine configuration to control plane and worker nodes
 - bootstrap the cluster
 - output kubeconfig and talosconfig
@@ -39,6 +38,7 @@ module "talos_cluster" {
   cluster_name      = "<cluster-name>"
   cluster_endpoint  = "https://<control-plane-ip>:6443"
   node_subnet       = "<subnet-cidr>"
+  installer_image   = "<installer_image>"
 }
 ```
 

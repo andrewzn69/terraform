@@ -20,4 +20,5 @@ module "talos_cluster" {
   cluster_name      = var.cluster_name
   cluster_endpoint  = var.cluster_endpoint
   node_subnet       = var.node_subnet
+  installer_image   = var.installer_image
 }

@@ -4,11 +4,11 @@ Examples covering common use cases of the `talos-cluster` module.
 
 ## Available Examples
 
-| Example                     | Description                                                        |
-| --------------------------- | ------------------------------------------------------------------ |
-| `single-node`               | One control plane and one worker node, minimal configuration      |
-| `ha-cluster`                | Three control planes and multiple workers for high availability    |
-| `custom-cni-and-extensions` | Single-node setup with schematic extensions and a custom CNI patch |
+| Example       | Description                                                     |
+| ------------- | --------------------------------------------------------------- |
+| `single-node` | One control plane and one worker node, minimal configuration    |
+| `ha-cluster`  | Three control planes and multiple workers for high availability |
+| `custom-cni`  | Single-node setup with a custom CNI patch                       |
 
 ## Running an Example
 
