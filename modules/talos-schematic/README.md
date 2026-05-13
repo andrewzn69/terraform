@@ -38,3 +38,7 @@ module "talos_schematic" {
   schematic_extensions = ["siderolabs/<schematic-extension-name>"]
 }
 ```
+
+## Examples
+
+See the [examples](./examples/) directory for complete working configurations.
