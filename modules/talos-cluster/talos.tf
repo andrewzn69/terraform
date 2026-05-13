@@ -91,9 +91,18 @@ resource "talos_machine_bootstrap" "this" {
   }
 }
 
+data "talos_cluster_health" "this" {
+  client_configuration = talos_machine_secrets.this.client_configuration
+  control_plane_nodes  = var.control_plane_ips
+  worker_nodes         = var.worker_ips
+  endpoints            = var.control_plane_ips
+
+  depends_on = [talos_machine_bootstrap.this]
+}
+
 resource "talos_cluster_kubeconfig" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
   node                 = local.bootstrap_endpoint
 
-  depends_on = [talos_machine_bootstrap.this]
+  depends_on = [data.talos_cluster_health.this]
 }

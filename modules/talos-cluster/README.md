@@ -5,7 +5,7 @@ Terraform module for bootstrapping a Talos Linux Kubernetes cluster from existin
 This module can:
 - generate and apply machine configuration to control plane and worker nodes
 - bootstrap the cluster
-- output kubeconfig and talosconfig
+- output kubeconfig and talosconfig after cluster health is confirmed
 
 ## Requirements
 
@@ -41,6 +41,12 @@ module "talos_cluster" {
   installer_image   = "<installer_image>"
 }
 ```
+
+## Health check
+
+This module uses `talos_cluster_health` internally to wait for all nodes to be ready
+before outputting the kubeconfig. Any downstream module that depends on `module.talos_cluster`
+is guaranteed to get a kubeconfig only after the cluster is fully operational.
 
 ## Examples
 
