@@ -1,0 +1,4 @@
+# disables tls termination in argocd server - handle tls at the ingress/gateway level
+configs:
+  params:
+    server.insecure: "true"
