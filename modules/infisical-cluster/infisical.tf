@@ -39,11 +39,31 @@ resource "infisical_project_identity" "this" {
   ]
 }
 
-resource "infisical_secret_folder" "this" {
-  for_each = toset(var.folders)
+locals {
+  all_paths = toset(flatten([
+    for p in var.folders : [
+      for i in range(length(split("/", p))) :
+      join("/", slice(split("/", p), 0, i + 1))
+    ]
+  ]))
 
+  depth1 = toset([for p in local.all_paths : p if length(split("/", p)) == 1])
+  depth2 = toset([for p in local.all_paths : p if length(split("/", p)) == 2])
+}
+
+resource "infisical_secret_folder" "depth1" {
+  for_each         = local.depth1
   project_id       = infisical_project.this.id
   environment_slug = var.environment_slug
   folder_path      = "/"
   name             = each.value
+}
+
+resource "infisical_secret_folder" "depth2" {
+  for_each         = local.depth2
+  project_id       = infisical_project.this.id
+  environment_slug = var.environment_slug
+  folder_path      = "/${split("/", each.value)[0]}"
+  name             = split("/", each.value)[1]
+  depends_on       = [infisical_secret_folder.depth1]
 }
