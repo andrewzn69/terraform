@@ -20,7 +20,7 @@ provider "infisical" {
   }
 }
 
-module "project" {
+module "projects" {
   source   = "../../"
   for_each = var.projects
 
