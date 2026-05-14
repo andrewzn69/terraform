@@ -13,7 +13,7 @@ output "client_secret" {
 }
 
 output "environment_slug" {
-  description = "Environment slug for the cluster"
+  description = "Environment slug to create folders"
   value       = var.environment_slug
 }
 
