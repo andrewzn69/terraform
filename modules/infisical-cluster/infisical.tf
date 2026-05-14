@@ -9,7 +9,7 @@ resource "infisical_project" "this" {
 }
 
 resource "infisical_identity" "this" {
-  name   = "k8s-operator-${var.cluster_name}"
+  name   = var.identity_name
   role   = "no-access"
   org_id = var.org_id
 }

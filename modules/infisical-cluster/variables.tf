@@ -5,8 +5,8 @@ variable "org_id" {
   type        = string
 }
 
-variable "cluster_name" {
-  description = "Name of the Kubernetes cluster, used for naming the machine identity"
+variable "identity_name" {
+  description = "Name of the machine identity"
   type        = string
 }
 
