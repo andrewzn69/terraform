@@ -1,0 +1,12 @@
+infisical_client_id     = "abcd1234-abcd-1234-abcd-abcd12341234"
+infisical_client_secret = "abcd1234efgh5678ijkl9012mnop3456qrst7890uvwx1234yzab5678cdef9012ghij"
+org_id                  = "abcd1234-abcd-1234-abcd-abcd12341234"
+
+identity_name = "my-project"
+project_name  = "My Project"
+project_slug  = "my-project"
+
+folders = [
+  "folder1",
+  "folder2/subfolder",
+]
