@@ -1,0 +1,23 @@
+# outputs.tf
+
+output "client_id" {
+  description = "Client ID for the Kubernetes operator"
+  value       = infisical_identity_universal_auth_client_secret.this.client_id
+  sensitive   = true
+}
+
+output "client_secret" {
+  description = "Client secret for the Kubernetes operator"
+  value       = infisical_identity_universal_auth_client_secret.this.client_secret
+  sensitive   = true
+}
+
+output "environment_slug" {
+  description = "Environment slug for the cluster"
+  value       = var.environment_slug
+}
+
+output "project_id" {
+  description = "Infisical project ID"
+  value       = infisical_project.this.id
+}
