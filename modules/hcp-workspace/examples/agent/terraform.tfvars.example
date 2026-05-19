@@ -1,0 +1,4 @@
+tfe_token                  = "exampl.atlasv1.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQR"
+organization               = "my-org"
+vcs_repo_identifier        = "my-org/my-repo"
+github_app_installation_id = "12345678"
