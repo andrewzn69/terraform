@@ -1,0 +1,14 @@
+# address management - let kubernetes assign pod IPs
+ipam:
+  mode: kubernetes
+
+# replace kube-proxy with ebpf
+kubeProxyReplacement: true
+
+# required for cilium to initialize networking on each node before pods are scheduled
+nodeinit:
+  enabled: true
+
+# l7 ingress/egress via kubernetes gateway api
+gatewayAPI:
+  enabled: true

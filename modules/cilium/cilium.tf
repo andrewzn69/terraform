@@ -18,8 +18,10 @@ locals {
   values = (
     var.values_url != null ? data.http.values[0].response_body :
     var.values_local != null ? var.values_local :
-    file("${path.module}/values.yaml")
+    file("${path.module}/values/${var.cluster_type}.yaml")
   )
+
+  endpoint_parts = var.cluster_endpoint != null ? split(":", trimprefix(var.cluster_endpoint, "https://")) : []
 }
 
 resource "helm_release" "cilium" {
@@ -34,6 +36,17 @@ resource "helm_release" "cilium" {
   timeout          = 600
 
   values = [local.values]
+
+  dynamic "set" {
+    for_each = var.cluster_type == "oke" ? [
+      { name = "k8sServiceHost", value = local.endpoint_parts[0] },
+      { name = "k8sServicePort", value = local.endpoint_parts[1] }
+    ] : []
+    content {
+      name  = set.value.name
+      value = set.value.value
+    }
+  }
 
   lifecycle {
     ignore_changes = all
