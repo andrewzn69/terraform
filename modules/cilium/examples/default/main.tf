@@ -18,8 +18,9 @@ provider "helm" {
   }
 }
 
-module "talos_cilium" {
+module "cilium" {
   source = "../../"
 
   cilium_version = var.cilium_version
+  cluster_type   = var.cluster_type
 }

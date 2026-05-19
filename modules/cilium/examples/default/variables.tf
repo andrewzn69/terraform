@@ -3,6 +3,11 @@ variable "cilium_version" {
   type        = string
 }
 
+variable "cluster_type" {
+  description = "Type of Kubernetes cluster"
+  type        = string
+}
+
 variable "kubernetes_host" {
   description = "Kubernetes API server url"
   type        = string

@@ -3,8 +3,13 @@ variable "cilium_version" {
   type        = string
 }
 
+variable "cluster_type" {
+  description = "Type of Kubernetes cluster"
+  type        = string
+}
+
 variable "values_url" {
-  description = "URl to fetch Cilium Helm values from"
+  description = "URL to fetch Cilium Helm values from"
   type        = string
 }
 

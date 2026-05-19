@@ -1,6 +1,7 @@
 cilium_version  = "1.19.3"
-values_url      = "https://raw.githubusercontent.com/andrewzn69/terraform/master/modules/talos-cilium/values.yaml"
+values_url      = "https://raw.githubusercontent.com/andrewzn69/terraform/master/modules/cilium/values/talos.yaml"
 kubernetes_host = "https://10.0.0.10:6443"
+cluster_type    = "talos"
 
 kubernetes_client_certificate = <<-EOT
   -----BEGIN CERTIFICATE-----

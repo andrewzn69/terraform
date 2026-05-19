@@ -1,13 +1,13 @@
 # Examples
 
-Examples covering common use cases of the `talos-cilium` module.
+Examples covering common use cases of the `cilium` module.
 
 ## Available Examples
 
-| Example         | Description                                             |
-| --------------- | ------------------------------------------------------- |
-| `default`       | Install Cilium using the module's built-in Talos values |
-| `remote-values` | Install Cilium with values fetched from a remote URL    |
+| Example         | Description                                          |
+| --------------- | ---------------------------------------------------- |
+| `default`       | Install Cilium using the module's built-in values    |
+| `remote-values` | Install Cilium with values fetched from a remote URL |
 
 ## Running an Example
 
@@ -43,7 +43,8 @@ terraform apply
 All examples expect these variables:
 
 ```hcl
-cilium_version                    = "<cilium_version>"
+cilium_version                    = "<cilium-version>"
+cluster_type                      = "<talos|oke>"
 kubernetes_host                   = "https://<control-plane-ip>:6443"
 kubernetes_client_certificate     = "<client-certificate-pem>"
 kubernetes_client_key             = "<client-key-pem>"
