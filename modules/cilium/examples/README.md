@@ -6,8 +6,8 @@ Examples covering common use cases of the `cilium` module.
 
 | Example         | Description                                                        |
 | --------------- | ------------------------------------------------------------------ |
-| `talos-default` | Install Cilium on talos cluster using the module's built-in values |
-| `remote-values` | Install Cilium with values fetched from a remote URL               |
+| `talos-default`    | Install Cilium on a Talos cluster using the module's built-in values      |
+| `oke-remote-values` | Install Cilium on an OKE cluster with values fetched from a remote URL   |
 
 ## Running an Example
 

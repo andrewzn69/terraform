@@ -3,8 +3,8 @@ variable "cilium_version" {
   type        = string
 }
 
-variable "cluster_type" {
-  description = "Type of Kubernetes cluster"
+variable "cluster_endpoint" {
+  description = "OKE cluster API endpoint in the format https://host:port"
   type        = string
 }
 
