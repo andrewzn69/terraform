@@ -4,10 +4,10 @@ Examples covering common use cases of the `cilium` module.
 
 ## Available Examples
 
-| Example         | Description                                          |
-| --------------- | ---------------------------------------------------- |
-| `default`       | Install Cilium using the module's built-in values    |
-| `remote-values` | Install Cilium with values fetched from a remote URL |
+| Example         | Description                                                        |
+| --------------- | ------------------------------------------------------------------ |
+| `talos-default` | Install Cilium on talos cluster using the module's built-in values |
+| `remote-values` | Install Cilium with values fetched from a remote URL               |
 
 ## Running an Example
 
