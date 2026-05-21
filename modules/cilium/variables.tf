@@ -1,13 +1,13 @@
 # variables.tf
 
 variable "cilium_version" {
-  description = "Cilium Helm chart version"
   type        = string
+  description = "Cilium Helm chart version"
 }
 
 variable "cluster_type" {
-  description = "Type of Kubernetes cluster. Selects the default Cilium values preset."
   type        = string
+  description = "Type of Kubernetes cluster. Selects the default Cilium values preset."
 
   validation {
     condition     = contains(["talos", "oke"], var.cluster_type)
@@ -16,8 +16,8 @@ variable "cluster_type" {
 }
 
 variable "cluster_endpoint" {
-  description = "Kubernetes API endpoint in the format https://host:port. Required when cluster_type is oke."
   type        = string
+  description = "Kubernetes API endpoint in the format https://host:port. Required when cluster_type is oke."
   default     = null
 
   validation {
@@ -32,13 +32,13 @@ variable "cluster_endpoint" {
 }
 
 variable "values_local" {
-  description = "Cilium Helm values as a YAML string, replaces the default values.yaml"
   type        = string
+  description = "Cilium Helm values as a YAML string, replaces the default values.yaml"
   default     = null
 }
 
 variable "values_url" {
-  description = "URL to fetch Cilium Helm values from, replaces the default values.yaml"
   type        = string
+  description = "URL to fetch Cilium Helm values from, replaces the default values.yaml"
   default     = null
 }

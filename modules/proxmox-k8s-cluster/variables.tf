@@ -1,7 +1,6 @@
 # variables.tf
 
 variable "control_plane_groups" {
-  description = "Control plane node groups"
   type = list(object({
     name              = string # unique group name, used as vm name prefix
     node_name         = string # proxmox node name where vms will be created
@@ -15,10 +14,10 @@ variable "control_plane_groups" {
     cloudinit_storage = string # proxmox storage pool for the cloud-init drive
     bridge            = string # proxmox network bridge for the vm nic
   }))
+  description = "Control plane node groups"
 }
 
 variable "worker_groups" {
-  description = "Worker node groups"
   type = list(object({
     name              = string           # unique group name, used as vm name prefix
     node_name         = string           # proxmox node name where vms will be created
@@ -34,25 +33,26 @@ variable "worker_groups" {
     data_disk_size    = optional(number) # secondary data disk size in GB, used for persistent storage (e.g. CSI)
     data_storage      = optional(string) # proxmox storage pool for the data disk
   }))
+  description = "Worker node groups"
 }
 
 variable "gateway_ip" {
-  description = "Gateway IP for VM network config"
   type        = string
+  description = "Gateway IP for VM network config"
 }
 
 variable "node_subnet" {
-  description = "Subnet CIDR for node network config"
   type        = string
+  description = "Subnet CIDR for node network config"
 }
 
 variable "iso_url" {
-  description = "URL of the OS ISO to download to Proxmox nodes"
   type        = string
+  description = "URL of the OS ISO to download to Proxmox nodes"
 }
 
 variable "iso_datastore_id" {
-  description = "Proxmox datastore to download the ISO into"
   type        = string
+  description = "Proxmox datastore to download the ISO into"
   default     = "local"
 }
