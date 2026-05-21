@@ -40,16 +40,31 @@ variable "access_token_max_ttl" {
   type        = number
   description = "Access token max TTL in seconds"
   default     = 7200
+
+  validation {
+    condition     = var.access_token_max_ttl >= var.access_token_ttl
+    error_message = "access_token_max_ttl must be greater than or equal to access_token_ttl"
+  }
 }
 
 variable "access_token_num_uses_limit" {
   type        = number
   description = "Max number of uses per access token, 0 means unlimited"
   default     = 0
+
+  validation {
+    condition     = var.access_token_num_uses_limit >= 0
+    error_message = "access_token_num_uses_limit must be 0 or greater"
+  }
 }
 
 variable "access_token_ttl" {
   type        = number
   description = "Access token TTL in seconds"
   default     = 7200
+
+  validation {
+    condition     = var.access_token_ttl > 0
+    error_message = "access_token_ttl must be greater than 0"
+  }
 }

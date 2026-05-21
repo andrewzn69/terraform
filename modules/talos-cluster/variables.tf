@@ -5,6 +5,11 @@
 variable "cluster_endpoint" {
   type        = string
   description = "Full URL of the Kubernetes API endpoint"
+
+  validation {
+    condition     = can(regex("^https://", var.cluster_endpoint))
+    error_message = "cluster_endpoint must start with https://"
+  }
 }
 
 variable "cluster_name" {
@@ -22,6 +27,11 @@ variable "control_plane_ips" {
 variable "node_subnet" {
   type        = string
   description = "Subnet CIDR used for kubelet nodeIP validation"
+
+  validation {
+    condition     = can(cidrhost(var.node_subnet, 0))
+    error_message = "node_subnet must be a valid CIDR notation"
+  }
 }
 
 variable "worker_ips" {
@@ -57,4 +67,9 @@ variable "installer_image" {
 variable "talos_version" {
   type        = string
   description = "Talos version"
+
+  validation {
+    condition     = can(regex("^v[0-9]+\\.[0-9]+\\.[0-9]+", var.talos_version))
+    error_message = "talos_version must start with vX.Y.Z"
+  }
 }

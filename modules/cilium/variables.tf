@@ -3,6 +3,11 @@
 variable "cilium_version" {
   type        = string
   description = "Cilium Helm chart version"
+
+  validation {
+    condition     = can(regex("^[0-9]+\\.[0-9]+\\.[0-9]+", var.cilium_version))
+    error_message = "cilium_version must start with X.Y.Z"
+  }
 }
 
 variable "cluster_endpoint" {
@@ -41,4 +46,9 @@ variable "values_url" {
   type        = string
   description = "URL to fetch Cilium Helm values from, replaces the default values.yaml"
   default     = null
+
+  validation {
+    condition     = var.values_url == null || can(regex("^https?://", var.values_url))
+    error_message = "values_url must be a valid http or https URL"
+  }
 }

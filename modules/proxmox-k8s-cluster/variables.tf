@@ -11,6 +11,11 @@ variable "iso_datastore_id" {
 variable "iso_url" {
   type        = string
   description = "URL of the OS ISO to download to Proxmox node(s)"
+
+  validation {
+    condition     = can(regex("^https?://", var.iso_url))
+    error_message = "iso_url must be a valid http or https URL"
+  }
 }
 
 # network
@@ -23,6 +28,11 @@ variable "gateway_ip" {
 variable "node_subnet" {
   type        = string
   description = "Subnet CIDR for node network config"
+
+  validation {
+    condition     = can(cidrhost(var.node_subnet, 0))
+    error_message = "node_subnet must be a valid CIDR notation"
+  }
 }
 
 # node pool

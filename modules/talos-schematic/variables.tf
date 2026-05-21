@@ -14,6 +14,11 @@ variable "bootloader" {
   type        = string
   description = "Bootloader type - sd-boot (UEFI only), grub (BIOS only), dual-boot (BIOS+UEFI), null defaults to auto (recommended)"
   default     = null
+
+  validation {
+    condition     = var.bootloader == null || contains(["sd-boot", "grub", "dual-boot"], var.bootloader)
+    error_message = "bootloader must be one of: sd-boot, grub, dual-boot"
+  }
 }
 
 variable "extra_kernel_args" {
@@ -48,4 +53,9 @@ variable "secureboot" {
 variable "talos_version" {
   type        = string
   description = "Talos version"
+
+  validation {
+    condition     = can(regex("^v[0-9]+\\.[0-9]+\\.[0-9]+", var.talos_version))
+    error_message = "talos_version must start with vX.Y.Z"
+  }
 }
