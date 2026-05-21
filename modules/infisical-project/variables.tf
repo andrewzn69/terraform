@@ -1,24 +1,6 @@
 # variables.tf
 
-variable "org_id" {
-  type        = string
-  description = "Infisical organization ID"
-}
-
-variable "identity_name" {
-  type        = string
-  description = "Name of the machine identity"
-}
-
-variable "project_name" {
-  type        = string
-  description = "Display name for the Infisical project"
-}
-
-variable "project_slug" {
-  type        = string
-  description = "Slug for the Infisical project"
-}
+# project
 
 variable "environment_slug" {
   type        = string
@@ -32,11 +14,27 @@ variable "folders" {
   default     = []
 }
 
-variable "access_token_ttl" {
-  type        = number
-  description = "Access token TTL in seconds"
-  default     = 7200
+variable "identity_name" {
+  type        = string
+  description = "Name of the machine identity"
 }
+
+variable "org_id" {
+  type        = string
+  description = "Infisical organization ID"
+}
+
+variable "project_name" {
+  type        = string
+  description = "Display name for the Infisical project"
+}
+
+variable "project_slug" {
+  type        = string
+  description = "Slug for the Infisical project"
+}
+
+# token
 
 variable "access_token_max_ttl" {
   type        = number
@@ -48,4 +46,10 @@ variable "access_token_num_uses_limit" {
   type        = number
   description = "Max number of uses per access token, 0 means unlimited"
   default     = 0
+}
+
+variable "access_token_ttl" {
+  type        = number
+  description = "Access token TTL in seconds"
+  default     = 7200
 }

@@ -1,18 +1,10 @@
 # variables.tf
 
-variable "control_plane_ips" {
-  type        = list(string)
-  description = "IP addresses of control plane nodes"
-}
+# cluster
 
-variable "worker_ips" {
-  type        = list(string)
-  description = "IP addresses of worker nodes"
-}
-
-variable "talos_version" {
+variable "cluster_endpoint" {
   type        = string
-  description = "Talos version"
+  description = "Full URL of the Kubernetes API endpoint"
 }
 
 variable "cluster_name" {
@@ -20,14 +12,35 @@ variable "cluster_name" {
   description = "Name of the Talos cluster"
 }
 
-variable "cluster_endpoint" {
-  type        = string
-  description = "Full URL of the Kubernetes API endpoint"
+# network
+
+variable "control_plane_ips" {
+  type        = list(string)
+  description = "IP addresses of control plane nodes"
 }
 
 variable "node_subnet" {
   type        = string
   description = "Subnet CIDR used for kubelet nodeIP validation"
+}
+
+variable "worker_ips" {
+  type        = list(string)
+  description = "IP addresses of worker nodes"
+}
+
+# talos
+
+variable "extra_control_plane_patches" {
+  type        = list(string)
+  description = "Additional Talos config patches for control plane nodes (YAML strings)"
+  default     = []
+}
+
+variable "extra_worker_patches" {
+  type        = list(string)
+  description = "Additional Talos config patches for worker nodes (YAML strings)"
+  default     = []
 }
 
 variable "install_disk" {
@@ -41,14 +54,7 @@ variable "installer_image" {
   description = "Talos installer OCI image reference"
 }
 
-variable "extra_control_plane_patches" {
-  type        = list(string)
-  description = "Additional Talos config patches for control plane nodes (YAML strings)"
-  default     = []
-}
-
-variable "extra_worker_patches" {
-  type        = list(string)
-  description = "Additional Talos config patches for worker nodes (YAML strings)"
-  default     = []
+variable "talos_version" {
+  type        = string
+  description = "Talos version"
 }

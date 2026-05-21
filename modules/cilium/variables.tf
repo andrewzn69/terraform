@@ -5,16 +5,6 @@ variable "cilium_version" {
   description = "Cilium Helm chart version"
 }
 
-variable "cluster_type" {
-  type        = string
-  description = "Type of Kubernetes cluster. Selects the default Cilium values preset."
-
-  validation {
-    condition     = contains(["talos", "oke"], var.cluster_type)
-    error_message = "Supported cluster types: talos, oke"
-  }
-}
-
 variable "cluster_endpoint" {
   type        = string
   description = "Kubernetes API endpoint in the format https://host:port. Required when cluster_type is oke."
@@ -28,6 +18,16 @@ variable "cluster_endpoint" {
   validation {
     condition     = var.cluster_type != "oke" || var.cluster_endpoint != null
     error_message = "cluster_endpoint is required when cluster_type is oke"
+  }
+}
+
+variable "cluster_type" {
+  type        = string
+  description = "Type of Kubernetes cluster. Selects the default Cilium values preset."
+
+  validation {
+    condition     = contains(["talos", "oke"], var.cluster_type)
+    error_message = "Supported cluster types: talos, oke"
   }
 }
 

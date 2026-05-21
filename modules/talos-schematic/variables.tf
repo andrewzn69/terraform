@@ -1,22 +1,5 @@
 # variables.tf
 
-variable "schematic_extensions" {
-  type        = list(string)
-  description = "List of Talos image factory official extensions to include in the schematic"
-  default     = []
-}
-
-variable "talos_version" {
-  type        = string
-  description = "Talos version"
-}
-
-variable "platform" {
-  type        = string
-  description = "Target platform"
-  default     = null
-}
-
 variable "architecture" {
   type        = string
   description = "CPU architecture"
@@ -27,15 +10,10 @@ variable "architecture" {
   }
 }
 
-variable "sbc" {
+variable "bootloader" {
   type        = string
-  description = "Single board computer target"
+  description = "Bootloader type - sd-boot (UEFI only), grub (BIOS only), dual-boot (BIOS+UEFI), null defaults to auto (recommended)"
   default     = null
-}
-
-variable "secureboot" {
-  type        = bool
-  description = "Whether to use Secure Boot enabled images"
 }
 
 variable "extra_kernel_args" {
@@ -44,8 +22,30 @@ variable "extra_kernel_args" {
   default     = []
 }
 
-variable "bootloader" {
+variable "platform" {
   type        = string
-  description = "Bootloader type - sd-boot (UEFI only), grub (BIOS only), dual-boot (BIOS+UEFI), null defaults to auto (recommended)"
+  description = "Target platform"
   default     = null
+}
+
+variable "sbc" {
+  type        = string
+  description = "Single board computer target"
+  default     = null
+}
+
+variable "schematic_extensions" {
+  type        = list(string)
+  description = "List of Talos image factory official extensions to include in the schematic"
+  default     = []
+}
+
+variable "secureboot" {
+  type        = bool
+  description = "Whether to use Secure Boot enabled images"
+}
+
+variable "talos_version" {
+  type        = string
+  description = "Talos version"
 }

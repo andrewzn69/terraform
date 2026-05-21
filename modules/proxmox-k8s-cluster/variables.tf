@@ -1,5 +1,32 @@
 # variables.tf
 
+# iso
+
+variable "iso_datastore_id" {
+  type        = string
+  description = "Proxmox datastore to download the ISO into"
+  default     = "local"
+}
+
+variable "iso_url" {
+  type        = string
+  description = "URL of the OS ISO to download to Proxmox node(s)"
+}
+
+# network
+
+variable "gateway_ip" {
+  type        = string
+  description = "Gateway IP for VM network config"
+}
+
+variable "node_subnet" {
+  type        = string
+  description = "Subnet CIDR for node network config"
+}
+
+# node pool
+
 variable "control_plane_groups" {
   type = list(object({
     name              = string # unique group name, used as vm name prefix
@@ -34,25 +61,4 @@ variable "worker_groups" {
     data_storage      = optional(string) # proxmox storage pool for the data disk
   }))
   description = "Worker node groups"
-}
-
-variable "gateway_ip" {
-  type        = string
-  description = "Gateway IP for VM network config"
-}
-
-variable "node_subnet" {
-  type        = string
-  description = "Subnet CIDR for node network config"
-}
-
-variable "iso_url" {
-  type        = string
-  description = "URL of the OS ISO to download to Proxmox nodes"
-}
-
-variable "iso_datastore_id" {
-  type        = string
-  description = "Proxmox datastore to download the ISO into"
-  default     = "local"
 }
